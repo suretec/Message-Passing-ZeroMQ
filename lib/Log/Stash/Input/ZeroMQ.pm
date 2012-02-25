@@ -14,11 +14,7 @@ has socket_bind => (
     default => 'tcp://*:5558',
 );
 
-has _ctx => (
-    is => 'ro',
-    isa => 'ZeroMQ::Context',
-    default => sub { ZeroMQ::Context->new() },
-);
+with 'Log::Stash::ZeroMQ::Role::HasAContext';
 
 has _socket => (
     is => 'ro',

@@ -3,13 +3,7 @@ use Moose;
 use ZeroMQ ':all';
 use namespace::autoclean;
 
-has _ctx => (
-    is => 'ro',
-    isa => 'ZeroMQ::Context',
-    lazy => 1,
-    default => sub { ZeroMQ::Context->new() },
-    clearer => '_clear_ctx',
-);
+with 'Log::Stash::ZeroMQ::Role::HasAContext';
 
 has connect => (
     isa => 'Str',
