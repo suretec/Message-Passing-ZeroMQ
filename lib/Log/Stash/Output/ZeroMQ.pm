@@ -1,7 +1,45 @@
 package Log::Stash::Output::ZeroMQ;
 use Moose;
-use ZeroMQ;
+use ZeroMQ ':all';
 use namespace::autoclean;
+
+has _ctx => (
+    is => 'ro',
+    isa => 'ZeroMQ::Context',
+    lazy => 1,
+    default => sub { ZeroMQ::Context->new() },
+    clearer => '_clear_ctx',
+);
+
+has connect => (
+    isa => 'Str',
+    is => 'ro',
+    default => sub { 'tcp://127.0.0.1:5558' },
+);
+
+has _socket => (
+    is => 'ro',
+    isa => 'ZeroMQ::Socket',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        my $socket = $self->_ctx->socket(ZMQ_PUB);
+        $socket->setsockopt(ZMQ_HWM, 1000);
+        $socket->connect($self->connect);
+        return $socket;
+    },
+    predicate => '_has_socket',
+    clearer => '_clear_socket',
+    handles => {
+        '_zmq_send' => 'send',
+    },
+);
+
+sub consume {
+    my $self = shift;
+    my $data = shift;
+    $self->_zmq_send($self->encode($data));
+}
 
 with 'Log::Stash::Mixin::Output';
 
