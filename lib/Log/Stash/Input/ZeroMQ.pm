@@ -1,11 +1,14 @@
 package Log::Stash::Input::ZeroMQ;
 use Moose;
 use ZeroMQ qw/:all/;
+use AnyEvent;
+use Scalar::Util qw/ weaken /;
 use namespace::autoclean;
 
 with 'Log::Stash::Mixin::Input';
 
 has socket_bind => (
+    is => 'ro',
     isa => 'Str',
     default => 'tcp://*:5558',
 );
