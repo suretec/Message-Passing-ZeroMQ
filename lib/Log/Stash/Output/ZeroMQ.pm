@@ -38,7 +38,8 @@ has _socket => (
 sub consume {
     my $self = shift;
     my $data = shift;
-    $self->_zmq_send($self->encode($data));
+    my $bytes = $self->encode($data);
+    $self->_zmq_send($bytes);
 }
 
 with 'Log::Stash::Mixin::Output';

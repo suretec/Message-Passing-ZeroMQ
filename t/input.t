@@ -7,7 +7,10 @@ use Log::Stash::Input::ZeroMQ;
 use Log::Stash::Output::Test;
 use ZeroMQ qw/:all/;
 
-my $output = Log::Stash::Output::Test->new();
+my $cv = AnyEvent->condvar;
+my $output = Log::Stash::Output::Test->new(
+    on_consume_cb => sub { $cv->send },
+);
 my $input = Log::Stash::Input::ZeroMQ->new(
     output_to => $output,
 );
@@ -19,8 +22,6 @@ $socket->connect('tcp://127.0.0.1:5558');
 
 $socket->send('{"message":"foo"}');
 
-my $cv = AnyEvent->condvar;
-my $t = AnyEvent->timer(after => 2, cb => sub { $cv->send });
 $cv->recv;
 
 is $output->messages_count, 1;
