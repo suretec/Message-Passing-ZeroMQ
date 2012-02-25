@@ -3,6 +3,7 @@ use Moose;
 use ZeroMQ qw/:all/;
 use AnyEvent;
 use Scalar::Util qw/ weaken /;
+use Try::Tiny qw/ try catch /;
 use namespace::autoclean;
 
 with 'Log::Stash::Mixin::Input';
@@ -40,7 +41,7 @@ sub _try_rx {
     my $self = shift();
     my $msg = $self->_zmq_recv(ZMQ_NOBLOCK);
     if ($msg) {
-        my $data = try { $self->decode($msg) }
+        my $data = try { $self->decode($msg->data) }
             catch { warn $_ };
         $self->output_to->consume($data);
     }
