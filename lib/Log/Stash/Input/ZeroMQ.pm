@@ -6,7 +6,7 @@ use Scalar::Util qw/ weaken /;
 use Try::Tiny qw/ try catch /;
 use namespace::autoclean;
 
-with 'Log::Stash::Mixin::Input';
+with 'Log::Stash::Role::Input';
 
 has socket_bind => (
     is => 'ro',

@@ -42,7 +42,7 @@ sub consume {
     $self->_zmq_send($bytes);
 }
 
-with 'Log::Stash::Mixin::Output';
+with 'Log::Stash::Role::Output';
 
 1;
 
