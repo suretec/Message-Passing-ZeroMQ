@@ -50,7 +50,36 @@ with 'Log::Stash::Role::Output';
 
 Log::Stash::Output::ZeroMQ - output logstash messages to ZeroMQ.
 
+=head1 SYNOPSIS
+
+    use Log::Stash::Output::ZeroMQ;
+    
+    my $logger = Log::Stash::Output::ZeroMQ->new;
+    $logger->consume({data => { some => 'data'}, '@metadata' => 'value' });
+
+    # You are expected to produce a logstash message format compatible message,
+    # see the documentation in Log::Stash for more details.
+    
+    # Or see Log::Dispatch::Log::Stash for a more 'normal' interface to
+    # simple logging.
+    
+    # Or use directly on command line:
+    logstash --input STDIN --output ZeroMQ
+    {"data":{"some":"data"},"@metadata":"value"}
+
 =head1 DESCRIPTION
+
+A L<Log::Stash> L<ZeroMQ> output class.
+
+Can be used as part of a chain of classes with the L<logstash> utility, or directly as
+a logger in normal perl applications.
+
+=head1 CAVEAT
+
+You cannot send ZeroMQ messages and then call fork() and send more ZeroMQ messages!
+
+If you need to call fork(), and you're not going to immediately exec() another process, you B<MUST>
+call FIXME MAKE THIS WORK!!!! 
 
 =head1 SEE ALSO
 

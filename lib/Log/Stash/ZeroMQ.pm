@@ -12,7 +12,45 @@ $VERSION = eval $VERSION;
 
 Log::Stash::ZeroMQ - input and output logstash messages to ZeroMQ.
 
+=head1 SYNOPSIS
+
+    # Terminal 1:
+    $ logstash --input STDIN --output ZeroMQ
+    {"data":{"some":"data"},"@metadata":"value"}
+    
+    # Terminal 2:
+    $ logstash --output STDOUT --input ZeroMQ
+    {"data":{"some":"data"},"@metadata":"value"}
+
 =head1 DESCRIPTION
+
+A L<ZeroMQ> transport for L<Log::Stash>.
+
+Designed for use as a log transport and aggregation mechanism for perl applications, allowing you
+to aggregate structured and non-structured log messages across the network in a non-blocking manor.
+
+Clients (I.e. users of the L<Log::Stash::Output::ZeroMQ> class) connect to a server (I.e. a user of the
+L<Log::Stash::Input::ZeroMQ class) via ZeroMQ's pub/sub sockets. These are setup to be lossy and non-blocking,
+meaning that if the log-receiver process is down or slow, then the application will queue a small (and configurable)
+amount of logs on it's side, and after that log messages will be dropped.
+
+Whilst throwing away log messages isn't a good thing to do, or something that you want to happen regularly,
+in many (especially web application) contexts, network logging being a single point of failure is
+unaccaptable from a reliablilty and graceful degredation standpoint.
+
+The application grinding to a halt as a non-essential centralised resource is unavailable (e.g. the log aggregation
+server) is significnalty less acceptable than the loss of non-essential logging data.
+
+=head1 HOW TO USE
+
+In your application emitting messages, you can either use L<Log::Stash::Output::ZeroMQ> directly, of you can use
+it via L<Log::Dispatch::Log::Stash>.
+
+    # FIXME - Example code, including overriding IP to connect to here
+
+On your log aggregation server, just run the logstash utility:
+
+    # FIXME - Example command line here
 
 =head1 SEE ALSO
 
