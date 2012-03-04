@@ -39,11 +39,11 @@ Log::Stash::ZeroMQ - input and output logstash messages to ZeroMQ.
 =head1 SYNOPSIS
 
     # Terminal 1:
-    $ logstash --input STDIN --output ZeroMQ
+    $ logstash --input STDIN --output ZeroMQ --output_options '{"connect":"tcp://127.0.0.1:5558"}'
     {"data":{"some":"data"},"@metadata":"value"}
-    
+
     # Terminal 2:
-    $ logstash --output STDOUT --input ZeroMQ
+    $ logstash --output STDOUT --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5558"}'
     {"data":{"some":"data"},"@metadata":"value"}
 
 =head1 DESCRIPTION
