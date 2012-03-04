@@ -24,7 +24,7 @@ $socket->send('{"message":"foo"}');
 
 $cv->recv;
 
-is $output->messages_count, 1;
+is $output->message_count, 1;
 
 is_deeply [$output->messages], [{message => "foo"}];
 

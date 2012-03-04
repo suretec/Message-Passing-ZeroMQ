@@ -21,7 +21,7 @@ my $input = Log::Stash::Input::ZeroMQ->new(
 );
 $cv->recv;
 
-is $input->output_to->messages_count, 1;
+is $input->output_to->message_count, 1;
 is_deeply([$input->output_to->messages], [{foo => 'bar'}]);
 
 done_testing;
