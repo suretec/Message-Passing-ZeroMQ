@@ -54,16 +54,16 @@ Designed for use as a log transport and aggregation mechanism for perl applicati
 to aggregate structured and non-structured log messages across the network in a non-blocking manor.
 
 Clients (I.e. users of the L<Log::Stash::Output::ZeroMQ> class) connect to a server (I.e. a user of the
-L<Log::Stash::Input::ZeroMQ class) via ZeroMQ's pub/sub sockets. These are setup to be lossy and non-blocking,
+L<Log::Stash::Input::ZeroMQ> class) via ZeroMQ's pub/sub sockets. These are setup to be lossy and non-blocking,
 meaning that if the log-receiver process is down or slow, then the application will queue a small (and configurable)
 amount of logs on it's side, and after that log messages will be dropped.
 
 Whilst throwing away log messages isn't a good thing to do, or something that you want to happen regularly,
 in many (especially web application) contexts, network logging being a single point of failure is
-unaccaptable from a reliablilty and graceful degredation standpoint.
+not acceptable from a reliability and graceful degradation standpoint.
 
 The application grinding to a halt as a non-essential centralised resource is unavailable (e.g. the log aggregation
-server) is significnalty less acceptable than the loss of non-essential logging data.
+server) is significantly less acceptable than the loss of non-essential logging data.
 
 =head1 HOW TO USE
 
@@ -111,7 +111,7 @@ Copyright Suretec Systems 2012.
 GNU Affero General Public License, Version 3
 
 If you feel this is too restrictive to be able to use this software,
-please talk to us as we'd be willing to consider relicensing under
+please talk to us as we'd be willing to consider re-licensing under
 less restrictive terms.
 
 =cut

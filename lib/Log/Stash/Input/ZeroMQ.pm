@@ -102,21 +102,15 @@ Log::Stash::Input::ZeroMQ - input logstash messages from ZeroMQ.
 
 =back
 
-=head1 AUTHOR
-
-Tomas (t0m) Doran <bobtfish@bobtfish.net>
-
 =head1 SPONSORSHIP
 
 This module exists due to the wonderful people at
 L<Suretec Systems|http://www.suretecsystems.com/> who sponsored it's
 development.
 
-=head1 COPYRIGHT
+=head1 AUTHOR, COPYRIGHT AND LICENSE
 
-Copyright Suretec Systems 2012.
+See L<Log::Stash>.
 
-=head1 LICENSE
-
-XXX - TODO
+=cut
 

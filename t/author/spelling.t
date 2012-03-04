@@ -4,6 +4,8 @@ use Test::More;
 use Test::Spelling;
 
 add_stopwords(qw(
+    lossy
+    ZeroMQ's
     Starman
     ZeroMQ
     API
@@ -22,6 +24,7 @@ add_stopwords(qw(
     STDOUT
     STDERR
     logstash
+    centralised
 ));
 set_spell_cmd('aspell list -l en');
 all_pod_files_spelling_ok();
