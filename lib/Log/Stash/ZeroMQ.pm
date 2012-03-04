@@ -108,5 +108,13 @@ Copyright Suretec Systems 2012.
 
 =head1 LICENSE
 
-XXX - TODO
+GNU Affero General Public License, Version 3
+
+If you feel this is too restrictive to be able to use this software,
+please talk to us as we'd be willing to consider relicensing under
+less restrictive terms.
+
+=cut
+
+1;
 
