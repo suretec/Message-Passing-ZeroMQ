@@ -42,6 +42,18 @@ sub _build_socket {
 
 1;
 
+=head1 NAME
+
+Log::Stash::ZeroMQ::HasASocket - Role for instances which have a ZMQ socket.
+
+=head1 ATTRIBUTES
+
+=head2 linger
+
+Bool indicating the value os the ZMQ_LINGER options.
+
+Defaults to 0 meaning sockets are lossy, but will not block.
+
 =head1 SPONSORSHIP
 
 This module exists due to the wonderful people at
