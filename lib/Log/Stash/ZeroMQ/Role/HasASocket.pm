@@ -14,11 +14,30 @@ has _socket => (
     clearer => '_clear_socket',
 );
 
+before _clear_ctx => sub {
+    my $self = shift;
+    if (!$self->linger) {
+        $self->_socket->setsockopt(ZMQ_LINGER, 0);
+    }
+    $self->_socket->close;
+    $self->_clear_socket;
+};
+
 requires '_socket_type';
+
+has linger => (
+    is => 'ro',
+    isa => 'Bool',
+    default => 0,
+);
 
 sub _build_socket {
     my $self = shift;
-   $self->_ctx->socket($self->_socket_type);
+    my $socket = $self->_ctx->socket($self->_socket_type);
+    if (!$self->linger) {
+        $socket->setsockopt(ZMQ_LINGER, 0);
+    }
+    $socket;
 }
 
 1;

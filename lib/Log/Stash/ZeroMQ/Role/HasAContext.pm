@@ -10,12 +10,14 @@ has _ctx => (
     isa => 'ZeroMQ::Context',
     lazy => 1,
     default => sub {
+        my $self = shift;
         my $ctx = ZeroMQ::Context->new();
-        push(@Log::Stash::ZeroMQ::CONTEXTS, $ctx);
-        weaken($Log::Stash::ZeroMQ::CONTEXTS[-1]);
+        push(@Log::Stash::ZeroMQ::_WITH_CONTEXTS, $self);
+        weaken($Log::Stash::ZeroMQ::_WITH_CONTEXTS[-1]);
         $ctx;
     },
     clearer => '_clear_ctx',
 );
 
 1;
+

@@ -2,15 +2,20 @@ package Log::Stash::ZeroMQ;
 use Moose ();
 use ZeroMQ qw/ :all /;
 use POSIX::AtFork ();
+use Sub::Name;
 use namespace::autoclean;
 
 our $VERSION = "0.001";
 $VERSION = eval $VERSION;
 
-sub at_fork {
-}
+our @_WITH_CONTEXTS;
 
-POSIX::AtFork->add_to_prepare(\&at_fork);
+POSIX::AtFork->add_to_prepare(subname at_fork => sub {
+    foreach my $thing (grep { defined $_ } @_WITH_CONTEXTS) {
+        $thing->_clear_ctx;
+    }
+    @_WITH_CONTEXTS = ();
+});
 
 1;
 

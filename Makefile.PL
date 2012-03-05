@@ -16,6 +16,7 @@ requires 'Try::Tiny';
 requires 'Task::Weaken';
 requires 'Log::Stash' => '0.001';
 requires 'POSIX::AtFork' => '0.02';
+requires 'Sub::Name';
 
 test_requires 'Test::More' => '0.88';
 
