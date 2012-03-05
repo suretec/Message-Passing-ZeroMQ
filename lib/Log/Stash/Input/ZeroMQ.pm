@@ -6,7 +6,16 @@ use Scalar::Util qw/ weaken /;
 use Try::Tiny qw/ try catch /;
 use namespace::autoclean;
 
-with 'Log::Stash::Role::Input';
+with qw/
+    Log::Stash::ZeroMQ::Role::HasASocket
+    Log::Stash::Role::Input
+/;
+
+has '+_socket' => (
+    handles => {
+        _zmq_recv => 'recv',
+    },
+);
 
 has socket_bind => (
     is => 'ro',
@@ -14,24 +23,16 @@ has socket_bind => (
     default => 'tcp://*:5558',
 );
 
-with 'Log::Stash::ZeroMQ::Role::HasAContext';
+sub _socket_type { ZMQ_SUB }
 
-has _socket => (
-    is => 'ro',
-    isa => 'ZeroMQ::Socket',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        my $socket = $self->_ctx->socket(ZMQ_SUB);
-        $socket->setsockopt(ZMQ_SUBSCRIBE, '');
-        $socket->setsockopt(ZMQ_HWM, 100000); # Buffer up to 100k messages.
-        $socket->bind($self->socket_bind);
-        return $socket;
-    },
-    handles => {
-        _zmq_recv => 'recv',
-    },
-);
+around _build_socket => sub {
+    my ($orig, $self, @args) = @_;
+    my $socket = $self->$orig(@args);
+    $socket->setsockopt(ZMQ_SUBSCRIBE, '');
+    $socket->setsockopt(ZMQ_HWM, 100000); # Buffer up to 100k messages.
+    $socket->bind($self->socket_bind);
+    return $socket;
+};
 
 sub _try_rx {
     my $self = shift();

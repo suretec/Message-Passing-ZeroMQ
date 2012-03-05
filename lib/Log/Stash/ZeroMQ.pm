@@ -1,34 +1,16 @@
 package Log::Stash::ZeroMQ;
 use Moose ();
-use ZeroMQ;
+use ZeroMQ qw/ :all /;
+use POSIX::AtFork ();
 use namespace::autoclean;
 
 our $VERSION = "0.001";
 $VERSION = eval $VERSION;
 
-use base 'Exporter';
-
-our @EXPORT = qw/
-    fork
-/;
-
-our @CONTEXTS;
-
-our $FORK;
-sub import {
-    $FORK ||= *{'CORE::GLOBAL::fork'};
-    # Test this even works?
-    *{'CORE::GLOBAL::fork'} = \&fork;
-    shift->SUPER::import(@_);
+sub at_fork {
 }
 
-sub fork {
-    foreach my $ctx (grep { defined $_ } @CONTEXTS) {
-        $ctx->term;
-    }
-    # FIXME - What if fork has already been replaced?
-    $FORK->(@_);
-}
+POSIX::AtFork->add_to_prepare(\&at_fork);
 
 1;
 

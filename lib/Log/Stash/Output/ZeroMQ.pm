@@ -3,7 +3,13 @@ use Moose;
 use ZeroMQ ':all';
 use namespace::autoclean;
 
-with 'Log::Stash::ZeroMQ::Role::HasAContext';
+with 'Log::Stash::ZeroMQ::Role::HasASocket';
+
+has '+_socket' => (
+    handles => {
+        '_zmq_send' => 'send',
+    },
+);
 
 has connect => (
     isa => 'Str',
@@ -11,23 +17,15 @@ has connect => (
     default => sub { 'tcp://127.0.0.1:5558' },
 );
 
-has _socket => (
-    is => 'ro',
-    isa => 'ZeroMQ::Socket',
-    lazy => 1,
-    default => sub {
-        my $self = shift;
-        my $socket = $self->_ctx->socket(ZMQ_PUB);
-        $socket->setsockopt(ZMQ_HWM, 1000);
-        $socket->connect($self->connect);
-        return $socket;
-    },
-    predicate => '_has_socket',
-    clearer => '_clear_socket',
-    handles => {
-        '_zmq_send' => 'send',
-    },
-);
+sub _socket_type { ZMQ_PUB }
+
+around _build_socket => sub {
+    my ($orig, $self, @args) = @_;
+    my $socket = $self->$orig(@args);
+    $socket->setsockopt(ZMQ_HWM, 1000);
+    $socket->connect($self->connect);
+    return $socket;
+};
 
 sub consume {
     my $self = shift;
