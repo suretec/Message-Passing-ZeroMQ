@@ -66,10 +66,6 @@ A L<Log::Stash> L<ZeroMQ> output class.
 Can be used as part of a chain of classes with the L<logstash> utility, or directly as
 a logger in normal perl applications.
 
-=head1 CAVEAT
-
-You cannot send ZeroMQ messages and then call fork() and send more ZeroMQ messages!
-
 =head1 METHODS
 
 =head2 consume
