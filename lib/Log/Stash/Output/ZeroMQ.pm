@@ -17,7 +17,7 @@ has connect => (
     default => sub { 'tcp://127.0.0.1:5558' },
 );
 
-sub _socket_type { ZMQ_PUB }
+sub _socket_type { 'PUB' }
 
 around _build_socket => sub {
     my ($orig, $self, @args) = @_;

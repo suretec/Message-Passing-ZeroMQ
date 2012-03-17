@@ -23,7 +23,7 @@ has socket_bind => (
     default => 'tcp://*:5558',
 );
 
-sub _socket_type { ZMQ_SUB }
+sub _socket_type { 'SUB' }
 
 around _build_socket => sub {
     my ($orig, $self, @args) = @_;

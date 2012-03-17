@@ -1,6 +1,7 @@
 package Log::Stash::ZeroMQ::Role::HasASocket;
 use Moose::Role;
 use ZeroMQ ':all';
+use Moose::Util::TypeConstraints;
 use namespace::autoclean;
 
 with 'Log::Stash::ZeroMQ::Role::HasAContext';
@@ -33,12 +34,19 @@ has linger => (
 
 sub _build_socket {
     my $self = shift;
-    my $socket = $self->_ctx->socket($self->_socket_type);
+    my $type_name = "ZeroMQ::Constants::ZMQ_" . $self->socket_type;
+    my $socket = $self->_ctx->socket(do { no strict 'refs'; &$type_name() });
     if (!$self->linger) {
         $socket->setsockopt(ZMQ_LINGER, 0);
     }
     $socket;
 }
+
+has socket_type => (
+    isa => enum([qw[PUB SUB PUSH PULL]]),
+    is => 'ro',
+    builder => '_socket_type',
+);
 
 1;
 
