@@ -39,13 +39,34 @@ sub _build_socket {
     if (!$self->linger) {
         $socket->setsockopt(ZMQ_LINGER, 0);
     }
+    $self->setsockopt($socket);
+    if ($self->_should_connect) {
+        $socket->connect($self->connect);
+    }
+    if ($self->_should_bind) {
+        $socket->bind($self->socket_bind);
+    }
     $socket;
 }
+
+sub setsockopt {}
+
+has socket_bind => (
+    is => 'ro',
+    isa => 'Str',
+    predicate => '_should_bind',
+);
 
 has socket_type => (
     isa => enum([qw[PUB SUB PUSH PULL]]),
     is => 'ro',
     builder => '_socket_type',
+);
+
+has connect => (
+    isa => 'Str',
+    is => 'ro',
+    predicate => '_should_connect',
 );
 
 1;

@@ -11,20 +11,15 @@ has '+_socket' => (
     },
 );
 
-has connect => (
-    isa => 'Str',
-    is => 'ro',
+has '+connect' => (
     default => sub { 'tcp://127.0.0.1:5558' },
 );
 
 sub _socket_type { 'PUB' }
 
-around _build_socket => sub {
-    my ($orig, $self, @args) = @_;
-    my $socket = $self->$orig(@args);
-    $socket->setsockopt(ZMQ_HWM, 1000);
-    $socket->connect($self->connect);
-    return $socket;
+after setsockopt => sub {
+    my ($self, $socket) = @_;
+    $socket->setsockopt(ZMQ_HWM, 1000); # Buffer up to 100k messages.
 };
 
 sub consume {

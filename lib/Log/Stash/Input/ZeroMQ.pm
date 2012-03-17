@@ -17,21 +17,16 @@ has '+_socket' => (
     },
 );
 
-has socket_bind => (
-    is => 'ro',
-    isa => 'Str',
+has '+socket_bind' => (
     default => 'tcp://*:5558',
 );
 
 sub _socket_type { 'SUB' }
 
-around _build_socket => sub {
-    my ($orig, $self, @args) = @_;
-    my $socket = $self->$orig(@args);
+after setsockopt => sub {
+    my ($self, $socket) = @_;
     $socket->setsockopt(ZMQ_SUBSCRIBE, '');
     $socket->setsockopt(ZMQ_HWM, 100000); # Buffer up to 100k messages.
-    $socket->bind($self->socket_bind);
-    return $socket;
 };
 
 sub _try_rx {
