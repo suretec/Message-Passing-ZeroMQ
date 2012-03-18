@@ -7,7 +7,9 @@ use Log::Stash::Input::ZeroMQ;
 use Log::Stash::Output::Test;
 use Log::Stash::Output::ZeroMQ;
 
-my $output = Log::Stash::Output::ZeroMQ->new();
+my $output = Log::Stash::Output::ZeroMQ->new(
+    connect => 'tcp://127.0.0.1:5558',
+);
 
 $output->consume({foo => 'bar'});
 
@@ -15,6 +17,7 @@ use Log::Stash::Input::ZeroMQ;
 use Log::Stash::Output::Test;
 my $cv = AnyEvent->condvar;
 my $input = Log::Stash::Input::ZeroMQ->new(
+    socket_bind => 'tcp://*:5558',
     output_to => Log::Stash::Output::Test->new(
         on_consume_cb => sub { $cv->send }
     ),

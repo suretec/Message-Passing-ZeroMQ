@@ -12,6 +12,7 @@ my $output = Log::Stash::Output::Test->new(
     on_consume_cb => sub { $cv->send },
 );
 my $input = Log::Stash::Input::ZeroMQ->new(
+    socket_bind => 'tcp://*:5558',
     output_to => $output,
 );
 ok $input;

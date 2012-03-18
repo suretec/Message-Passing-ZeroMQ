@@ -17,10 +17,6 @@ has '+_socket' => (
     },
 );
 
-has '+socket_bind' => (
-    default => 'tcp://*:5558',
-);
-
 sub _socket_type { 'SUB' }
 
 after setsockopt => sub {

@@ -11,10 +11,6 @@ has '+_socket' => (
     },
 );
 
-has '+connect' => (
-    default => sub { 'tcp://127.0.0.1:5558' },
-);
-
 sub _socket_type { 'PUB' }
 
 after setsockopt => sub {
