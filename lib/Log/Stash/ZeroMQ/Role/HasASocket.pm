@@ -73,15 +73,34 @@ has connect => (
 
 =head1 NAME
 
-Log::Stash::ZeroMQ::HasASocket - Role for instances which have a ZMQ socket.
+Log::Stash::ZeroMQ::HasASocket - Role for instances which have a ZeroMQ socket.
 
 =head1 ATTRIBUTES
 
+=head2 socket_bind
+
+Bind a server to an address.
+
+=head2 connect
+
+Connect to a server.
+
+=head2 socket_type
+
+PUB/SUB/PUSH/POLL
+
 =head2 linger
 
-Bool indicating the value os the ZMQ_LINGER options.
+Bool indicating the value of the ZMQ_LINGER options.
 
 Defaults to 0 meaning sockets are lossy, but will not block.
+
+=head1 METHODS
+
+=head2 setsockopt
+
+For wrapping by sub-classes to set options after the socket
+is created.
 
 =head1 SPONSORSHIP
 

@@ -4,6 +4,9 @@ use Test::More;
 use Test::Spelling;
 
 add_stopwords(qw(
+    setsockopt
+    SureVoIP
+    VoIP
     lossy
     ZeroMQ's
     Starman
