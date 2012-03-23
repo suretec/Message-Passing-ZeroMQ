@@ -19,7 +19,7 @@ my $cv = AnyEvent->condvar;
 my $input = Log::Stash::Input::ZeroMQ->new(
     socket_bind => 'tcp://*:5558',
     output_to => Log::Stash::Output::Test->new(
-        on_consume_cb => sub { $cv->send }
+        cb => sub { $cv->send }
     ),
 );
 $cv->recv;

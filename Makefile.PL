@@ -14,7 +14,7 @@ requires 'JSON';
 requires 'JSON::XS';
 requires 'Try::Tiny';
 requires 'Task::Weaken';
-requires 'Log::Stash' => '0.001';
+requires 'Log::Stash' => '0.002';
 requires 'POSIX::AtFork' => '0.02';
 requires 'Sub::Name';
 
