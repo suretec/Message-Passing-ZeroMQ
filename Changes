@@ -1,3 +1,6 @@
+0.002
+    - Avoid bug in earlier ZeroMQ versions by dependening on newer ones.
+
 0.001
     - Initial version
 
