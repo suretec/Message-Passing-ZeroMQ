@@ -61,9 +61,74 @@ it via L<Log::Dispatch::Log::Stash>.
 
 On your log aggregation server, just run the logstash utility:
 
-    # FIXME - Example command line here
+    logstash --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5222"}' \
+        --output File --output_options '{"filename":"/tmp/my_test.log"}'
+
+=head1 CONNECTION DIRECTION
+
+Note that in ZeroMQ, the connection direction and the direction of message flow can be
+entirely opposite. I.e. a client can connect to a server and send messages to it, or
+recieve messages from it (depending on the direction of the socket types).
+
+=head1 SOCKET TYPES
+
+ZeroMQ supports multiple socket types, the only ones used in Log::Stash::ZeroMQ are:
+
+=head2 PUB/SUB
+
+Used for general message distribution - you can have either multiple producers (PUB)
+which connect to one consumer (SUB), or multiple consumers (SUB) which connect to one
+producer (PUB).
+
+All consumers will get a copy of every message.
+
+In Log::Stash terms, L<Log::Stash::Input::ZeroMQ> is for SUB sockets, and
+L<Log::Stash::Output::ZeroMQ> is for PUB sockets.
+
+=head2 PUSH/PULL
+
+Used for message distribution. A sever (PUSH) distributes messages between
+a number of connecting clients (PULL)
+
+In Log::Stash terms, L<Log::Stash::Input::ZeroMQ> is for PULL sockets, and
+L<Log::Stash::Output::ZeroMQ> is for PUSH sockets.
+
+=head1 MORE COMPLEX EXAMPLES
+
+With this in mind, we can easily create a system which aggregates messages from
+multiple publishers, and passes them out (in a round-robin fashion) to a pool of workers.
+
+    # The message distributor:
+    logstash --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5222"}' \
+        --output ZeroMQ --output_options '{"socket_bind":"tcp://*:5223","socket_type":"PUSH"}'
+
+    # Workers
+    {
+        package MyApp::MessageWorker;
+        use Moo;
+
+        with 'Log::Stash::Role::Filter';
+
+        sub filter {
+            my ($self, $message) = @_;
+            # .... process the message in any way you want here
+            return undef; # Do not output the message..
+        }
+    }
+
+    logstash --input ZeroMQ --input_options '{"connect":"tcp://127.0.0.1:5223","socket_type":"PULL"}'
+        --filter '+MyApp::MessageWorker'
+        --output STDOUT
+
+You log messages into the distributor as per the above simple example, and you can run multiple worker
+processes..
+
+Less trivial setups could/would emit messages on error, or maybe re-emit the incoming message after transforming it
+in some way.
 
 =head1 SEE ALSO
+
+For more detailed information about ZeroMQ and how it works, please consult the ZeroMQ guide and the other links below:
 
 =over
 
