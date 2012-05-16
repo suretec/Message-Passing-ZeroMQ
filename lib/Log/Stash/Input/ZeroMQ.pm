@@ -104,7 +104,7 @@ the SureVoIP API -
 
 =head1 AUTHOR, COPYRIGHT AND LICENSE
 
-See L<Log::Stash>.
+See L<Log::Stash::ZeroMQ>.
 
 =cut
 

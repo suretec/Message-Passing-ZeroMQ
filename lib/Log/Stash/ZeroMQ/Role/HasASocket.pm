@@ -81,19 +81,65 @@ Log::Stash::ZeroMQ::HasASocket - Role for instances which have a ZeroMQ socket.
 
 Bind a server to an address.
 
+For example C<< tcp://*:5222 >> to make a server listening
+on a port on all of the host's addresses, or C<< tcp://127.0.0.1:5222 >>
+to bind the socket to a specific IP on the host.
+
 =head2 connect
 
-Connect to a server.
+Connect to a server. For example C<< tcp://127.0.0.1:5222 >>.
+
+This option is mutually exclusive with socket_bind, as sockets
+can connect in one direction only.
 
 =head2 socket_type
 
-PUB/SUB/PUSH/POLL
+The connection direction can be either the same as, or the opposite
+of the message flow direction.
+
+The currently supported socket types are:
+
+=head3 PUB
+
+This socket publishes messages to zero or more subscribers.
+
+All subscribers get a copy of each message.
+
+=head3 SUB
+
+The pair of PUB, recieves broadcast messages.
+
+=head3 PUSH
+
+This socket type distributes messages in a round-robin fashion between
+subscribers. Therefore N subscribers will see 1/N of the message flow.
+
+=head2 PULL
+
+The pair of PUSH, recieves a proportion of messages distributed.
 
 =head2 linger
 
 Bool indicating the value of the ZMQ_LINGER options.
 
 Defaults to 0 meaning sockets are lossy, but will not block.
+
+=head3 linger off (default)
+
+Sending messages will be buffered on the client side up to the set
+buffer for this connection. Further messages will be dropped until
+the buffer starts to empty.
+
+Receiving messages will be buffered by ZeroMQ for you until you're
+ready to recieve them, after which they will be discarded.
+
+=head3 linger off
+
+Sending messages will be be buffered on the client side up to the set
+buffer for this connection. If this buffer fills, then ZeroMQ will block
+the program which was trying to send the message. If the client quits
+before all messages were sent, ZeroMQ will block exit until they have been
+sent.
 
 =head1 METHODS
 
@@ -104,13 +150,15 @@ is created.
 
 =head1 SPONSORSHIP
 
-This module exists due to the wonderful people at
-L<Suretec Systems|http://www.suretecsystems.com/> who sponsored it's
-development.
+This module exists due to the wonderful people at Suretec Systems Ltd.
+<http://www.suretecsystems.com/> who sponsored it's development for its
+VoIP division called SureVoIP <http://www.surevoip.co.uk/> for use with
+the SureVoIP API - 
+<http://www.surevoip.co.uk/support/wiki/api_documentation>
 
 =head1 AUTHOR, COPYRIGHT AND LICENSE
 
-See L<Log::Stash>.
+See L<Log::Stash::ZeroMQ>.
 
 =cut
 
