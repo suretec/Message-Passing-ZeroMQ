@@ -107,7 +107,7 @@ All subscribers get a copy of each message.
 
 =head3 SUB
 
-The pair of PUB, recieves broadcast messages.
+The pair of PUB, receives broadcast messages.
 
 =head3 PUSH
 
@@ -116,7 +116,7 @@ subscribers. Therefore N subscribers will see 1/N of the message flow.
 
 =head2 PULL
 
-The pair of PUSH, recieves a proportion of messages distributed.
+The pair of PUSH, receives a proportion of messages distributed.
 
 =head2 linger
 
@@ -131,7 +131,7 @@ buffer for this connection. Further messages will be dropped until
 the buffer starts to empty.
 
 Receiving messages will be buffered by ZeroMQ for you until you're
-ready to recieve them, after which they will be discarded.
+ready to receive them, after which they will be discarded.
 
 =head3 linger off
 

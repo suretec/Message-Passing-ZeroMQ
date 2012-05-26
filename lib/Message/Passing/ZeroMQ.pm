@@ -68,7 +68,7 @@ On your log aggregation server, just run the logstash utility:
 
 Note that in ZeroMQ, the connection direction and the direction of message flow can be
 entirely opposite. I.e. a client can connect to a server and send messages to it, or
-recieve messages from it (depending on the direction of the socket types).
+receive messages from it (depending on the direction of the socket types).
 
 =head1 SOCKET TYPES
 
