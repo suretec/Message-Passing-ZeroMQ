@@ -1,4 +1,4 @@
-package Log::Stash::Input::ZeroMQ;
+package Message::Passing::Input::ZeroMQ;
 use Moose;
 use ZeroMQ qw/:all/;
 use AnyEvent;
@@ -7,8 +7,8 @@ use Try::Tiny qw/ try catch /;
 use namespace::autoclean;
 
 with qw/
-    Log::Stash::ZeroMQ::Role::HasASocket
-    Log::Stash::Role::Input
+    Message::Passing::ZeroMQ::Role::HasASocket
+    Message::Passing::Role::Input
 /;
 
 has '+_socket' => (
@@ -74,7 +74,7 @@ sub BUILD {
 
 =head1 NAME
 
-Log::Stash::Input::ZeroMQ - input logstash messages from ZeroMQ.
+Message::Passing::Input::ZeroMQ - input logstash messages from ZeroMQ.
 
 =head1 DESCRIPTION
 
@@ -82,11 +82,11 @@ Log::Stash::Input::ZeroMQ - input logstash messages from ZeroMQ.
 
 =over
 
-=item L<Log::Stash::ZeroMQ>
+=item L<Message::Passing::ZeroMQ>
 
-=item L<Log::Stash::Output::ZeroMQ>
+=item L<Message::Passing::Output::ZeroMQ>
 
-=item L<Log::Stash>
+=item L<Message::Passing>
 
 =item L<ZeroMQ>
 
@@ -104,7 +104,7 @@ the SureVoIP API -
 
 =head1 AUTHOR, COPYRIGHT AND LICENSE
 
-See L<Log::Stash::ZeroMQ>.
+See L<Message::Passing::ZeroMQ>.
 
 =cut
 

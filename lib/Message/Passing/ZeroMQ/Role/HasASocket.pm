@@ -1,10 +1,10 @@
-package Log::Stash::ZeroMQ::Role::HasASocket;
+package Message::Passing::ZeroMQ::Role::HasASocket;
 use Moose::Role;
 use ZeroMQ ':all';
 use Moose::Util::TypeConstraints;
 use namespace::autoclean;
 
-with 'Log::Stash::ZeroMQ::Role::HasAContext';
+with 'Message::Passing::ZeroMQ::Role::HasAContext';
 
 has _socket => (
     is => 'ro',
@@ -73,7 +73,7 @@ has connect => (
 
 =head1 NAME
 
-Log::Stash::ZeroMQ::HasASocket - Role for instances which have a ZeroMQ socket.
+Message::Passing::ZeroMQ::HasASocket - Role for instances which have a ZeroMQ socket.
 
 =head1 ATTRIBUTES
 
@@ -158,7 +158,7 @@ the SureVoIP API -
 
 =head1 AUTHOR, COPYRIGHT AND LICENSE
 
-See L<Log::Stash::ZeroMQ>.
+See L<Message::Passing::ZeroMQ>.
 
 =cut
 

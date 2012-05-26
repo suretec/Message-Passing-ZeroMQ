@@ -1,9 +1,9 @@
-package Log::Stash::Output::ZeroMQ;
+package Message::Passing::Output::ZeroMQ;
 use Moose;
 use ZeroMQ ':all';
 use namespace::autoclean;
 
-with 'Log::Stash::ZeroMQ::Role::HasASocket';
+with 'Message::Passing::ZeroMQ::Role::HasASocket';
 
 has '+_socket' => (
     handles => {
@@ -25,25 +25,25 @@ sub consume {
     $self->_zmq_send($bytes);
 }
 
-with 'Log::Stash::Role::Output';
+with 'Message::Passing::Role::Output';
 
 1;
 
 =head1 NAME
 
-Log::Stash::Output::ZeroMQ - output logstash messages to ZeroMQ.
+Message::Passing::Output::ZeroMQ - output logstash messages to ZeroMQ.
 
 =head1 SYNOPSIS
 
-    use Log::Stash::Output::ZeroMQ;
+    use Message::Passing::Output::ZeroMQ;
 
-    my $logger = Log::Stash::Output::ZeroMQ->new;
+    my $logger = Message::Passing::Output::ZeroMQ->new;
     $logger->consume({data => { some => 'data'}, '@metadata' => 'value' });
 
     # You are expected to produce a logstash message format compatible message,
-    # see the documentation in Log::Stash for more details.
+    # see the documentation in Message::Passing for more details.
 
-    # Or see Log::Dispatch::Log::Stash for a more 'normal' interface to
+    # Or see Log::Dispatch::Message::Passing for a more 'normal' interface to
     # simple logging.
 
     # Or use directly on command line:
@@ -52,7 +52,7 @@ Log::Stash::Output::ZeroMQ - output logstash messages to ZeroMQ.
 
 =head1 DESCRIPTION
 
-A L<Log::Stash> L<ZeroMQ> output class.
+A L<Message::Passing> L<ZeroMQ> output class.
 
 Can be used as part of a chain of classes with the L<logstash> utility, or directly as
 a logger in normal perl applications.
@@ -67,11 +67,11 @@ Sends a message.
 
 =over
 
-=item L<Log::Stash::ZeroMQ>
+=item L<Message::Passing::ZeroMQ>
 
-=item L<Log::Stash::Input::ZeroMQ>
+=item L<Message::Passing::Input::ZeroMQ>
 
-=item L<Log::Stash>
+=item L<Message::Passing>
 
 =item L<ZeroMQ>
 
@@ -89,7 +89,7 @@ the SureVoIP API -
 
 =head1 AUTHOR, COPYRIGHT AND LICENSE
 
-See L<Log::Stash>.
+See L<Message::Passing>.
 
 =cut
 

@@ -1,3 +1,5 @@
+    - Rename dist
+
 0.002
     - Avoid bug in earlier ZeroMQ versions by dependening on newer ones.
 

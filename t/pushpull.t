@@ -3,17 +3,17 @@ use warnings;
 
 use Test::More;
 
-use Log::Stash::Input::ZeroMQ;
-use Log::Stash::Output::ZeroMQ;
-use Log::Stash::Output::Test;
-my $test = Log::Stash::Output::Test->new;
-my $input = Log::Stash::Input::ZeroMQ->new(
+use Message::Passing::Input::ZeroMQ;
+use Message::Passing::Output::ZeroMQ;
+use Message::Passing::Output::Test;
+my $test = Message::Passing::Output::Test->new;
+my $input = Message::Passing::Input::ZeroMQ->new(
         connect => 'tcp://127.0.0.1:5558',
         socket_type => 'PULL',
         output_to => $test,
 );
 
-my $output = Log::Stash::Output::ZeroMQ->new(
+my $output = Message::Passing::Output::ZeroMQ->new(
     socket_bind => 'tcp://127.0.0.1:5558',
     socket_type => 'PUSH',
 );

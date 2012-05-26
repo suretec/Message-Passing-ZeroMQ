@@ -1,4 +1,4 @@
-package Log::Stash::ZeroMQ;
+package Message::Passing::ZeroMQ;
 use Moose ();
 use ZeroMQ qw/ :all /;
 use POSIX::AtFork ();
@@ -21,7 +21,7 @@ POSIX::AtFork->add_to_prepare(subname at_fork => sub {
 
 =head1 NAME
 
-Log::Stash::ZeroMQ - input and output logstash messages to ZeroMQ.
+Message::Passing::ZeroMQ - input and output logstash messages to ZeroMQ.
 
 =head1 SYNOPSIS
 
@@ -35,13 +35,13 @@ Log::Stash::ZeroMQ - input and output logstash messages to ZeroMQ.
 
 =head1 DESCRIPTION
 
-A L<ZeroMQ> transport for L<Log::Stash>.
+A L<ZeroMQ> transport for L<Message::Passing>.
 
 Designed for use as a log transport and aggregation mechanism for perl applications, allowing you
 to aggregate structured and non-structured log messages across the network in a non-blocking manor.
 
-Clients (I.e. users of the L<Log::Stash::Output::ZeroMQ> class) connect to a server (I.e. a user of the
-L<Log::Stash::Input::ZeroMQ> class) via ZeroMQ's pub/sub sockets. These are setup to be lossy and non-blocking,
+Clients (I.e. users of the L<Message::Passing::Output::ZeroMQ> class) connect to a server (I.e. a user of the
+L<Message::Passing::Input::ZeroMQ> class) via ZeroMQ's pub/sub sockets. These are setup to be lossy and non-blocking,
 meaning that if the log-receiver process is down or slow, then the application will queue a small (and configurable)
 amount of logs on it's side, and after that log messages will be dropped.
 
@@ -54,8 +54,8 @@ server) is significantly less acceptable than the loss of non-essential logging 
 
 =head1 HOW TO USE
 
-In your application emitting messages, you can either use L<Log::Stash::Output::ZeroMQ> directly, of you can use
-it via L<Log::Dispatch::Log::Stash>.
+In your application emitting messages, you can either use L<Message::Passing::Output::ZeroMQ> directly, of you can use
+it via L<Log::Dispatch::Message::Passing>.
 
     # FIXME - Example code, including overriding IP to connect to here
 
@@ -72,7 +72,7 @@ recieve messages from it (depending on the direction of the socket types).
 
 =head1 SOCKET TYPES
 
-ZeroMQ supports multiple socket types, the only ones used in Log::Stash::ZeroMQ are:
+ZeroMQ supports multiple socket types, the only ones used in Message::Passing::ZeroMQ are:
 
 =head2 PUB/SUB
 
@@ -82,16 +82,16 @@ producer (PUB).
 
 All consumers will get a copy of every message.
 
-In Log::Stash terms, L<Log::Stash::Input::ZeroMQ> is for SUB sockets, and
-L<Log::Stash::Output::ZeroMQ> is for PUB sockets.
+In Message::Passing terms, L<Message::Passing::Input::ZeroMQ> is for SUB sockets, and
+L<Message::Passing::Output::ZeroMQ> is for PUB sockets.
 
 =head2 PUSH/PULL
 
 Used for message distribution. A sever (PUSH) distributes messages between
 a number of connecting clients (PULL)
 
-In Log::Stash terms, L<Log::Stash::Input::ZeroMQ> is for PULL sockets, and
-L<Log::Stash::Output::ZeroMQ> is for PUSH sockets.
+In Message::Passing terms, L<Message::Passing::Input::ZeroMQ> is for PULL sockets, and
+L<Message::Passing::Output::ZeroMQ> is for PUSH sockets.
 
 =head1 MORE COMPLEX EXAMPLES
 
@@ -107,7 +107,7 @@ multiple publishers, and passes them out (in a round-robin fashion) to a pool of
         package MyApp::MessageWorker;
         use Moo;
 
-        with 'Log::Stash::Role::Filter';
+        with 'Message::Passing::Role::Filter';
 
         sub filter {
             my ($self, $message) = @_;
@@ -132,11 +132,11 @@ For more detailed information about ZeroMQ and how it works, please consult the 
 
 =over
 
-=item L<Log::Stash::Output::ZeroMQ>
+=item L<Message::Passing::Output::ZeroMQ>
 
-=item L<Log::Stash::Input::ZeroMQ>
+=item L<Message::Passing::Input::ZeroMQ>
 
-=item L<Log::Stash>
+=item L<Message::Passing>
 
 =item L<ZeroMQ>
 

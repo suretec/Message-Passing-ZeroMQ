@@ -5,7 +5,7 @@ use Module::Install::AuthorRequires;
 use Module::Install::AuthorTests;
 use Module::Install::Authority;
 
-all_from 'lib/Log/Stash/ZeroMQ.pm';
+all_from 'lib/Message/Passing/ZeroMQ.pm';
 
 license 'AGPL_3';
 authority 'GHENRY';
@@ -18,7 +18,7 @@ requires 'JSON';
 requires 'JSON::XS';
 requires 'Try::Tiny';
 requires 'Task::Weaken';
-requires 'Log::Stash' => '0.002';
+requires 'Message::Passing' => '0.002';
 requires 'POSIX::AtFork' => '0.02';
 requires 'Sub::Name';
 
@@ -34,7 +34,7 @@ author_requires 'Test::Spelling';
 author_tests 't/author';
 
 if ($Module::Install::AUTHOR) {
-    system("pod2text lib/Log/Stash/ZeroMQ.pm > README")
+    system("pod2text lib/Message/Passing/ZeroMQ.pm > README")
         and die $!;
 }
 

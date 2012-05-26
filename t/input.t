@@ -3,15 +3,15 @@ use warnings;
 use Test::More;
 
 use AnyEvent;
-use Log::Stash::Input::ZeroMQ;
-use Log::Stash::Output::Test;
+use Message::Passing::Input::ZeroMQ;
+use Message::Passing::Output::Test;
 use ZeroMQ qw/:all/;
 
 my $cv = AnyEvent->condvar;
-my $output = Log::Stash::Output::Test->new(
+my $output = Message::Passing::Output::Test->new(
     cb => sub { $cv->send },
 );
-my $input = Log::Stash::Input::ZeroMQ->new(
+my $input = Message::Passing::Input::ZeroMQ->new(
     socket_bind => 'tcp://*:5558',
     output_to => $output,
 );

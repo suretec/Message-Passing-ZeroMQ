@@ -1,6 +1,6 @@
-package Log::Stash::ZeroMQ::Role::HasAContext;
+package Message::Passing::ZeroMQ::Role::HasAContext;
 use Moose::Role;
-use Log::Stash::ZeroMQ ();
+use Message::Passing::ZeroMQ ();
 use ZeroMQ ':all';
 use Scalar::Util qw/ weaken /;
 use namespace::autoclean;
@@ -14,8 +14,8 @@ has _ctx => (
     default => sub {
         my $self = shift;
         my $ctx = ZeroMQ::Context->new();
-        push(@Log::Stash::ZeroMQ::_WITH_CONTEXTS, $self);
-        weaken($Log::Stash::ZeroMQ::_WITH_CONTEXTS[-1]);
+        push(@Message::Passing::ZeroMQ::_WITH_CONTEXTS, $self);
+        weaken($Message::Passing::ZeroMQ::_WITH_CONTEXTS[-1]);
         $ctx;
     },
     clearer => '_clear_ctx',
@@ -25,7 +25,7 @@ has _ctx => (
 
 =head1 NAME
 
-Log::Stash::ZeroMQ::Role::HasAContext - Components with a ZeroMQ context consume this role.
+Message::Passing::ZeroMQ::Role::HasAContext - Components with a ZeroMQ context consume this role.
 
 =head1 SPONSORSHIP
 
@@ -37,7 +37,7 @@ the SureVoIP API -
 
 =head1 AUTHOR, COPYRIGHT AND LICENSE
 
-See L<Log::Stash::ZeroMQ>.
+See L<Message::Passing::ZeroMQ>.
 
 =cut
 

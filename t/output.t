@@ -3,22 +3,22 @@ use warnings;
 use Test::More;
 
 use AnyEvent;
-use Log::Stash::Input::ZeroMQ;
-use Log::Stash::Output::Test;
-use Log::Stash::Output::ZeroMQ;
+use Message::Passing::Input::ZeroMQ;
+use Message::Passing::Output::Test;
+use Message::Passing::Output::ZeroMQ;
 
-my $output = Log::Stash::Output::ZeroMQ->new(
+my $output = Message::Passing::Output::ZeroMQ->new(
     connect => 'tcp://127.0.0.1:5558',
 );
 
 $output->consume({foo => 'bar'});
 
-use Log::Stash::Input::ZeroMQ;
-use Log::Stash::Output::Test;
+use Message::Passing::Input::ZeroMQ;
+use Message::Passing::Output::Test;
 my $cv = AnyEvent->condvar;
-my $input = Log::Stash::Input::ZeroMQ->new(
+my $input = Message::Passing::Input::ZeroMQ->new(
     socket_bind => 'tcp://*:5558',
-    output_to => Log::Stash::Output::Test->new(
+    output_to => Message::Passing::Output::Test->new(
         cb => sub { $cv->send }
     ),
 );
