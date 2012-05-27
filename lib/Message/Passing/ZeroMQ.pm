@@ -5,7 +5,7 @@ use POSIX::AtFork ();
 use Sub::Name;
 use namespace::autoclean;
 
-our $VERSION = "0.002";
+our $VERSION = "0.002_01";
 $VERSION = eval $VERSION;
 
 our @_WITH_CONTEXTS;
