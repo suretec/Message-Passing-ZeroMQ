@@ -49,7 +49,7 @@ HOW TO USE
 CONNECTION DIRECTION
     Note that in ZeroMQ, the connection direction and the direction of
     message flow can be entirely opposite. I.e. a client can connect to a
-    server and send messages to it, or recieve messages from it (depending
+    server and send messages to it, or receive messages from it (depending
     on the direction of the socket types).
 
 SOCKET TYPES
