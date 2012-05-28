@@ -73,7 +73,7 @@ has connect => (
 
 =head1 NAME
 
-Message::Passing::ZeroMQ::HasASocket - Role for instances which have a ZeroMQ socket.
+Message::Passing::ZeroMQ::Role::HasASocket - Role for instances which have a ZeroMQ socket.
 
 =head1 ATTRIBUTES
 

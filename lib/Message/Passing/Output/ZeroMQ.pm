@@ -31,7 +31,7 @@ with 'Message::Passing::Role::Output';
 
 =head1 NAME
 
-Message::Passing::Output::ZeroMQ - output logstash messages to ZeroMQ.
+Message::Passing::Output::ZeroMQ - output messages to ZeroMQ.
 
 =head1 SYNOPSIS
 
@@ -40,21 +40,18 @@ Message::Passing::Output::ZeroMQ - output logstash messages to ZeroMQ.
     my $logger = Message::Passing::Output::ZeroMQ->new;
     $logger->consume({data => { some => 'data'}, '@metadata' => 'value' });
 
-    # You are expected to produce a logstash message format compatible message,
-    # see the documentation in Message::Passing for more details.
-
     # Or see Log::Dispatch::Message::Passing for a more 'normal' interface to
     # simple logging.
 
     # Or use directly on command line:
-    logstash --input STDIN --output ZeroMQ
+    message-passing --input STDIN --output ZeroMQ
     {"data":{"some":"data"},"@metadata":"value"}
 
 =head1 DESCRIPTION
 
 A L<Message::Passing> L<ZeroMQ> output class.
 
-Can be used as part of a chain of classes with the L<logstash> utility, or directly as
+Can be used as part of a chain of classes with the L<message-passing> utility, or directly as
 a logger in normal perl applications.
 
 =head1 METHODS

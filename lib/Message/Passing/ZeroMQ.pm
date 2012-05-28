@@ -21,16 +21,16 @@ POSIX::AtFork->add_to_prepare(subname at_fork => sub {
 
 =head1 NAME
 
-Message::Passing::ZeroMQ - input and output logstash messages to ZeroMQ.
+Message::Passing::ZeroMQ - input and output messages to ZeroMQ.
 
 =head1 SYNOPSIS
 
     # Terminal 1:
-    $ logstash --input STDIN --output ZeroMQ --output_options '{"connect":"tcp://127.0.0.1:5558"}'
+    $ message-passing --input STDIN --output ZeroMQ --output_options '{"connect":"tcp://127.0.0.1:5558"}'
     {"data":{"some":"data"},"@metadata":"value"}
 
     # Terminal 2:
-    $ logstash --output STDOUT --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5558"}'
+    $ message-passing --output STDOUT --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5558"}'
     {"data":{"some":"data"},"@metadata":"value"}
 
 =head1 DESCRIPTION
@@ -59,9 +59,9 @@ it via L<Log::Dispatch::Message::Passing>.
 
     # FIXME - Example code, including overriding IP to connect to here
 
-On your log aggregation server, just run the logstash utility:
+On your log aggregation server, just run the message-passing utility:
 
-    logstash --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5222"}' \
+    message-passing --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5222"}' \
         --output File --output_options '{"filename":"/tmp/my_test.log"}'
 
 =head1 CONNECTION DIRECTION
@@ -99,7 +99,7 @@ With this in mind, we can easily create a system which aggregates messages from
 multiple publishers, and passes them out (in a round-robin fashion) to a pool of workers.
 
     # The message distributor:
-    logstash --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5222"}' \
+    message-passing --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5222"}' \
         --output ZeroMQ --output_options '{"socket_bind":"tcp://*:5223","socket_type":"PUSH"}'
 
     # Workers
@@ -116,7 +116,7 @@ multiple publishers, and passes them out (in a round-robin fashion) to a pool of
         }
     }
 
-    logstash --input ZeroMQ --input_options '{"connect":"tcp://127.0.0.1:5223","socket_type":"PULL"}'
+    message-passing --input ZeroMQ --input_options '{"connect":"tcp://127.0.0.1:5223","socket_type":"PULL"}'
         --filter '+MyApp::MessageWorker'
         --output STDOUT
 

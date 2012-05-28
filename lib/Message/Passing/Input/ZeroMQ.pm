@@ -74,7 +74,7 @@ sub BUILD {
 
 =head1 NAME
 
-Message::Passing::Input::ZeroMQ - input logstash messages from ZeroMQ.
+Message::Passing::Input::ZeroMQ - input messages from ZeroMQ.
 
 =head1 DESCRIPTION
 
