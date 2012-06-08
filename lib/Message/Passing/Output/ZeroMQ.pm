@@ -21,8 +21,7 @@ after setsockopt => sub {
 sub consume {
     my $self = shift;
     my $data = shift;
-    my $bytes = $self->encode($data);
-    $self->_zmq_send($bytes);
+    $self->_zmq_send($data);
 }
 
 with 'Message::Passing::Role::Output';

@@ -29,9 +29,7 @@ sub _try_rx {
     my $self = shift();
     my $msg = $self->_zmq_recv(ZMQ_NOBLOCK);
     if ($msg) {
-        my $data = try { $self->decode($msg->data) }
-            catch { warn $_ };
-        $self->output_to->consume($data);
+        $self->output_to->consume($msg->data);
     }
     return $msg;
 }

@@ -21,7 +21,7 @@ requires 'JSON';
 requires 'JSON::XS';
 requires 'Try::Tiny';
 requires 'Task::Weaken';
-requires 'Message::Passing' => '0.002';
+requires 'Message::Passing' => '0.006';
 requires 'POSIX::AtFork' => '0.02';
 requires 'Sub::Name';
 
