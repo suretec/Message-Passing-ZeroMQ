@@ -43,21 +43,28 @@ Message::Passing::Output::ZeroMQ - output messages to ZeroMQ.
     # simple logging.
 
     # Or use directly on command line:
-    message-passing --input STDIN --output ZeroMQ
+    message-passing --input STDIN --output ZeroMQ --output_options \
+        '{"connect":"tcp://192.168.0.1:5552"}'
     {"data":{"some":"data"},"@metadata":"value"}
 
 =head1 DESCRIPTION
 
-A L<Message::Passing> L<ZeroMQ> output class.
+A L<Message::Passing> ZeroMQ output class.
 
 Can be used as part of a chain of classes with the L<message-passing> utility, or directly as
 a logger in normal perl applications.
 
+=head1 ATTRIBUTES
+
+See L<Message::Passing::ZeroMQ/CONNECTION ATTRIBUTES>.
+
 =head1 METHODS
 
-=head2 consume
+=head2 consume ($msg)
 
-Sends a message.
+Sends a message, as-is. This means that you must have encoded the message to a string before
+sending it. The C<message-pass> utility will do this for you into JSON, or you can
+do it manually as shown in the example in L<Message::Passing::ZeroMQ>.
 
 =head1 SEE ALSO
 

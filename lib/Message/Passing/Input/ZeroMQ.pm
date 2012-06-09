@@ -74,7 +74,20 @@ sub BUILD {
 
 Message::Passing::Input::ZeroMQ - input messages from ZeroMQ.
 
+=head1 SYNOPSIS
+
+    message-passing --output STDOUT --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5552"}'
+
 =head1 DESCRIPTION
+
+A L<Message::Passing> ZeroMQ input class.
+
+Can be used as part of a chain of classes with the L<message-passing> utility, or directly as
+an input with L<Message::Passing::DSL>.
+
+=head1 ATTRIBUTES
+
+See L<Message::Passing::ZeroMQ/CONNECTION ATTRIBUTES>
 
 =head1 SEE ALSO
 

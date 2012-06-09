@@ -26,11 +26,11 @@ Message::Passing::ZeroMQ - input and output messages to ZeroMQ.
 =head1 SYNOPSIS
 
     # Terminal 1:
-    $ message-passing --input STDIN --output ZeroMQ --output_options '{"connect":"tcp://127.0.0.1:5558"}'
+    $ message-passing --input STDIN --output ZeroMQ --output_options '{"connect":"tcp://127.0.0.1:5552"}'
     {"data":{"some":"data"},"@metadata":"value"}
 
     # Terminal 2:
-    $ message-passing --output STDOUT --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5558"}'
+    $ message-passing --output STDOUT --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5552"}'
     {"data":{"some":"data"},"@metadata":"value"}
 
 =head1 DESCRIPTION
@@ -54,21 +54,32 @@ server) is significantly less acceptable than the loss of non-essential logging 
 
 =head1 HOW TO USE
 
-In your application emitting messages, you can either use L<Message::Passing::Output::ZeroMQ> directly, of you can use
-it via L<Log::Dispatch::Message::Passing>.
+In your application emitting messages, you can either use L<Message::Passing::Output::ZeroMQ> directly, 
+or you can use it via L<Log::Dispatch::Message::Passing>.
 
-    # FIXME - Example code, including overriding IP to connect to here
+    use Log::Dispatch;
+    use Log::Dispatch::Message::Passing;
+    use Message::Passing::Output::ZeroMQ;
+    use Message::Passing::Filter::Encode::JSON;
+
+    my $log = Log::Dispatch->new;
+
+    $log->add(Log::Dispatch::Message::Passing->new(
+        name      => 'myapp_aggregate_log',
+        min_level => 'debug',
+        output    => Message::Passing::Filter::Encode::JSON->new(
+          output_to => Message::Passing::Output::ZeroMQ->new(
+            connect => 'tcp://192.168.0.1:5558',
+          )
+        ),
+    ));
+
+    $log->warn($_) for qw/ foo bar baz /;
 
 On your log aggregation server, just run the message-passing utility:
 
     message-passing --input ZeroMQ --input_options '{"socket_bind":"tcp://*:5222"}' \
         --output File --output_options '{"filename":"/tmp/my_test.log"}'
-
-=head1 CONNECTION DIRECTION
-
-Note that in ZeroMQ, the connection direction and the direction of message flow can be
-entirely opposite. I.e. a client can connect to a server and send messages to it, or
-receive messages from it (depending on the direction of the socket types).
 
 =head1 SOCKET TYPES
 
@@ -92,6 +103,34 @@ a number of connecting clients (PULL)
 
 In Message::Passing terms, L<Message::Passing::Input::ZeroMQ> is for PULL sockets, and
 L<Message::Passing::Output::ZeroMQ> is for PUSH sockets.
+
+=head1 CONNECTION DIRECTION
+
+Note that in ZeroMQ, the connection direction and the direction of message flow can be
+entirely opposite. I.e. a client can connect to a server and send messages to it, or
+receive messages from it (depending on the direction of the socket types).
+
+=head1 CONNECTION ATTRIBUTES
+
+Both L<Message::Passing::Input::ZeroMQ> and L<Message::Passing::Output::ZeroMQ> support
+either binding a server or connecting to a remote host, due to the fact that ZeroMQ connections
+can be in any direction, as noted above.
+
+Therefore, each input or output should have one (but not both!) of the following attributes:
+
+=head2 connect
+
+Connects to a remote server, e.g. C<< tcp://192.168.0.1:5222 >>
+
+=head2 socket_bind
+
+Binds a server and waits for connections from clients, e.g. C<< tcp://*:5222 >>
+
+=head2 socket_type
+
+This defaults to C<SUB> for L<Message::Passing::Input::ZeroMQ> and C<PUB> for
+L<Message::Passing::Output::ZeroMQ>, however you can override it to C<PUSH>/C<PULL> as
+appropriate for your use case if desired.
 
 =head1 MORE COMPLEX EXAMPLES
 
@@ -141,6 +180,8 @@ For more detailed information about ZeroMQ and how it works, please consult the 
 =item L<ZeroMQ>
 
 =item L<http://www.zeromq.org/>
+
+=item L<http://zguide.zeromq.org/page:all>
 
 =back
 
