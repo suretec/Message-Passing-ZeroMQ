@@ -17,8 +17,6 @@ requires 'Moose';
 requires 'namespace::autoclean';
 requires 'AnyEvent';
 requires 'ZeroMQ' => '0.21';
-requires 'JSON';
-requires 'JSON::XS';
 requires 'Try::Tiny';
 requires 'Task::Weaken';
 requires 'Message::Passing' => '0.006';
