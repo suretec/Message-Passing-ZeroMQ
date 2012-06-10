@@ -4,6 +4,7 @@ use ZeroMQ qw/:all/;
 use AnyEvent;
 use Scalar::Util qw/ weaken /;
 use Try::Tiny qw/ try catch /;
+use Message::Passing::Types qw/ ArrayOfStr /;
 use namespace::autoclean;
 
 with qw/
@@ -21,9 +22,20 @@ sub _socket_type { 'SUB' }
 
 sub _build_socket_hwm { 100000 }
 
+has subscribe => (
+    isa => ArrayOfStr,
+    is => 'ro',
+    coerce => 1,
+    default => sub { [ '' ] }, # Subscribe to everything!
+);
+
 after setsockopt => sub {
     my ($self, $socket) = @_;
-    $socket->setsockopt(ZMQ_SUBSCRIBE, '');
+    if ($self->socket_type eq 'SUB') {
+        foreach my $sub (@{ $self->subscribe }) {
+            $socket->setsockopt(ZMQ_SUBSCRIBE, $sub);
+        }
+    }
 };
 
 sub _try_rx {
@@ -89,6 +101,13 @@ an input with L<Message::Passing::DSL>.
 =head1 ATTRIBUTES
 
 See L<Message::Passing::ZeroMQ/CONNECTION ATTRIBUTES>
+
+=head2 subscribe
+
+If the input socket is a C<SUB> socket, then the C<ZMQ_SUBSCRIBE>
+socket option will be set once for each value in the subscribe attribute.
+
+Defaults to '', which means all messages are subscribed to.
 
 =head1 SEE ALSO
 

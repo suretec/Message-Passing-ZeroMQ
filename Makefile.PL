@@ -19,7 +19,7 @@ requires 'AnyEvent';
 requires 'ZeroMQ' => '0.21';
 requires 'Try::Tiny';
 requires 'Task::Weaken';
-requires 'Message::Passing' => '0.006';
+requires 'Message::Passing' => '0.008';
 requires 'POSIX::AtFork' => '0.02';
 requires 'Sub::Name';
 

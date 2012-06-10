@@ -1,3 +1,5 @@
+    - Allow SUB sockets to subscribe to a subset of possible messages.
+
 0.005
     - Improve documentation.
 
