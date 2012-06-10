@@ -13,10 +13,7 @@ has '+_socket' => (
 
 sub _socket_type { 'PUB' }
 
-after setsockopt => sub {
-    my ($self, $socket) = @_;
-    $socket->setsockopt(ZMQ_HWM, 1000); # Buffer up to 100k messages.
-};
+sub _build_socket_hwm { 10000 }
 
 sub consume {
     my $self = shift;

@@ -1,5 +1,11 @@
     - Improve documentation.
 
+    - Fix incorrect docs to do with linger option
+
+    - Add ability to override default high water marks on sockets.
+
+    - Increase default high water mark for the output
+
 0.004
     - Changes to match up with Message::Passing 0.006
 

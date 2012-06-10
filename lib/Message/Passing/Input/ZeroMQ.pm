@@ -19,10 +19,11 @@ has '+_socket' => (
 
 sub _socket_type { 'SUB' }
 
+sub _build_socket_hwm { 100000 }
+
 after setsockopt => sub {
     my ($self, $socket) = @_;
     $socket->setsockopt(ZMQ_SUBSCRIBE, '');
-    $socket->setsockopt(ZMQ_HWM, 100000); # Buffer up to 100k messages.
 };
 
 sub _try_rx {

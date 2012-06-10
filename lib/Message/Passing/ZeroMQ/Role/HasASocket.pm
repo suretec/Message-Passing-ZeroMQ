@@ -49,7 +49,16 @@ sub _build_socket {
     $socket;
 }
 
-sub setsockopt {}
+has socket_hwm => (
+    is => 'ro',
+    isa => 'Int',
+    builder => '_build_socket_hwm',
+);
+
+sub setsockopt {
+    my ($self, $socket) = @_;
+    $socket->setsockopt(ZMQ_HWM, $self->socket_hwm);
+};
 
 has socket_bind => (
     is => 'ro',
@@ -122,24 +131,17 @@ The pair of PUSH, receives a proportion of messages distributed.
 
 Bool indicating the value of the ZMQ_LINGER options.
 
-Defaults to 0 meaning sockets are lossy, but will not block.
+Defaults to 0 meaning sockets will not block on shutdown if a server
+is unavailable (i.e. queued messages will be discarded).
 
-=head3 linger off (default)
+=head3 socket_hwm
 
-Sending messages will be buffered on the client side up to the set
-buffer for this connection. Further messages will be dropped until
-the buffer starts to empty.
+Set the High Water Mark for the socket. Depending on the socket type,
+messages are likely to be discarded once this high water mark is exceeded
+(i.e. there are more than this many messages buffered).
 
-Receiving messages will be buffered by ZeroMQ for you until you're
-ready to receive them, after which they will be discarded.
-
-=head3 linger off
-
-Sending messages will be be buffered on the client side up to the set
-buffer for this connection. If this buffer fills, then ZeroMQ will block
-the program which was trying to send the message. If the client quits
-before all messages were sent, ZeroMQ will block exit until they have been
-sent.
+A value of 0 disables the high water mark, meaning that messages will be
+buffered until RAM runs out.
 
 =head1 METHODS
 
