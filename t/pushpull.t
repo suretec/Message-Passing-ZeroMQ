@@ -8,6 +8,7 @@ use Message::Passing::Output::ZeroMQ;
 use Message::Passing::Output::Test;
 use Message::Passing::Filter::Encoder::JSON;
 use Message::Passing::Filter::Decoder::JSON;
+alarm(30);
 my $test = Message::Passing::Output::Test->new;
 my $input = Message::Passing::Input::ZeroMQ->new(
         connect => 'tcp://127.0.0.1:5558',
