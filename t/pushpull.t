@@ -25,6 +25,7 @@ my $t; $t = AnyEvent->timer(
     after => 1,
     cb => sub {
         $output->consume({});
+        diag "Outer callback";
         $t = AnyEvent->timer(after => 1, cb => sub { $cv->send });
     },
 );
