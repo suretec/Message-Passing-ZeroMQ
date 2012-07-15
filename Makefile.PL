@@ -13,13 +13,13 @@ resources(
     repository => "git://github.com/suretec/Message-Passing-ZeroMQ.git",
 );
 
-requires 'Moose';
-requires 'namespace::autoclean';
+requires 'Moo' => '0.091011';
+requires 'namespace::clean';
 requires 'AnyEvent';
 requires 'ZeroMQ' => '0.21';
 requires 'Try::Tiny';
 requires 'Task::Weaken';
-requires 'Message::Passing' => '0.008';
+requires 'Message::Passing' => '0.011';
 requires 'POSIX::AtFork' => '0.02';
 requires 'Sub::Name';
 

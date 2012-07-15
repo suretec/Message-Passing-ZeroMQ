@@ -1,15 +1,15 @@
 package Message::Passing::ZeroMQ::Role::HasAContext;
-use Moose::Role;
+use Moo::Role;
 use Message::Passing::ZeroMQ ();
 use ZeroMQ ':all';
 use Scalar::Util qw/ weaken /;
-use namespace::autoclean;
+use namespace::clean -except => 'meta';
 
 ## TODO - Support (default to?) shared contexts
 
 has _ctx => (
     is => 'ro',
-    isa => 'ZeroMQ::Context',
+#    isa => 'ZeroMQ::Context',
     lazy => 1,
     default => sub {
         my $self = shift;

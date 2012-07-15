@@ -1,9 +1,12 @@
 package Message::Passing::Output::ZeroMQ;
-use Moose;
+use Moo;
 use ZeroMQ ':all';
-use namespace::autoclean;
+use namespace::clean -except => 'meta';
 
-with 'Message::Passing::ZeroMQ::Role::HasASocket';
+with qw/
+    Message::Passing::ZeroMQ::Role::HasASocket
+    Message::Passing::Role::Output
+/;
 
 has '+_socket' => (
     handles => {
@@ -20,8 +23,6 @@ sub consume {
     my $data = shift;
     $self->_zmq_send($data);
 }
-
-with 'Message::Passing::Role::Output';
 
 1;
 

@@ -1,14 +1,14 @@
 package Message::Passing::ZeroMQ::Role::HasASocket;
-use Moose::Role;
+use Moo::Role;
 use ZeroMQ ':all';
-use Moose::Util::TypeConstraints;
-use namespace::autoclean;
+use MooX::Types::MooseLike::Base qw/ :all /;
+use namespace::clean -except => 'meta';
 
 with 'Message::Passing::ZeroMQ::Role::HasAContext';
 
 has _socket => (
     is => 'ro',
-    isa => 'ZeroMQ::Socket',
+#    isa => 'ZeroMQ::Socket',
     lazy => 1,
     builder => '_build_socket',
     predicate => '_has_socket',
@@ -28,8 +28,8 @@ requires '_socket_type';
 
 has linger => (
     is => 'ro',
-    isa => 'Bool',
-    default => 0,
+    isa => Bool,
+    default => sub { 0 },
 );
 
 sub _build_socket {
@@ -46,34 +46,40 @@ sub _build_socket {
     if ($self->_should_bind) {
         $socket->bind($self->socket_bind);
     }
+    if (!$self->_should_connect && !$self->_should_bind) {
+        use Data::Dumper;
+        die "Neither asked to connect or bind, invalid" . Dumper($self);
+    }
     $socket;
 }
 
 has socket_hwm => (
     is => 'ro',
-    isa => 'Int',
+    isa => Int,
     builder => '_build_socket_hwm',
+    lazy => 1,
 );
 
 sub setsockopt {
     my ($self, $socket) = @_;
     $socket->setsockopt(ZMQ_HWM, $self->socket_hwm);
-};
+}
 
 has socket_bind => (
     is => 'ro',
-    isa => 'Str',
+    isa => Str,
     predicate => '_should_bind',
 );
 
 has socket_type => (
-    isa => enum([qw[PUB SUB PUSH PULL]]),
+#    isa => enum([qw[PUB SUB PUSH PULL]]),
     is => 'ro',
     builder => '_socket_type',
+    lazy => 1,
 );
 
 has connect => (
-    isa => 'Str',
+    isa => Str,
     is => 'ro',
     predicate => '_should_connect',
 );

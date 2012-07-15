@@ -1,11 +1,11 @@
 package Message::Passing::Input::ZeroMQ;
-use Moose;
+use Moo;
 use ZeroMQ qw/:all/;
 use AnyEvent;
 use Scalar::Util qw/ weaken /;
 use Try::Tiny qw/ try catch /;
 use Message::Passing::Types qw/ ArrayOfStr /;
-use namespace::autoclean;
+use namespace::clean -except => 'meta';
 
 with qw/
     Message::Passing::ZeroMQ::Role::HasASocket
@@ -23,9 +23,9 @@ sub _socket_type { 'SUB' }
 sub _build_socket_hwm { 100000 }
 
 has subscribe => (
-    isa => ArrayOfStr,
+    isa => sub { ref($_[0]) eq 'ARRAY' },
     is => 'ro',
-    coerce => 1,
+    lazy => 1,
     default => sub { [ '' ] }, # Subscribe to everything!
 );
 
