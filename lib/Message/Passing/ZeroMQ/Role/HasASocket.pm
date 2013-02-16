@@ -28,8 +28,8 @@ requires '_socket_type';
 
 has linger => (
     is => 'ro',
-    isa => Bool,
     default => sub { 0 },
+    isa => 'Int',
 );
 
 sub _build_socket {
