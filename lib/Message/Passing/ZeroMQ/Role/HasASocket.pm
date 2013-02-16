@@ -28,7 +28,7 @@ requires '_socket_type';
 
 has linger => (
     is => 'ro',
-    isa => 'Bool',
+    isa => 'Int',
     default => 0,
 );
 
