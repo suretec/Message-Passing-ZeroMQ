@@ -17,7 +17,7 @@ has _socket => (
 
 has socket_builder => (
     is        => 'ro',
-    isa       => 'CodeRef',
+    isa       => CodeRef,
     predicate => '_has_socket_builder',
 );
 
@@ -35,7 +35,7 @@ requires '_socket_type';
 has linger => (
     is => 'ro',
     default => sub { 0 },
-    isa => 'Int',
+    isa => Int,
 );
 
 sub _build_socket {
