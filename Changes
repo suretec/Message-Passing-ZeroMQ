@@ -1,3 +1,4 @@
+0.006
     - Port to Moo
 
     - Allow the client to supply a socket builder to take control of the

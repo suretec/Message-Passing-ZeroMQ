@@ -6,7 +6,7 @@ use POSIX::AtFork ();
 use Sub::Name;
 use namespace::clean -except => 'meta';
 
-our $VERSION = "0.005";
+our $VERSION = "0.006";
 $VERSION = eval $VERSION;
 
 our @_WITH_CONTEXTS;
