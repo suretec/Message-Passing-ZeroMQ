@@ -4,7 +4,6 @@ use ZeroMQ qw/:all/;
 use AnyEvent;
 use Scalar::Util qw/ weaken /;
 use Try::Tiny qw/ try catch /;
-use Message::Passing::Types qw/ ArrayOfStr /;
 use namespace::clean -except => 'meta';
 
 with qw/
