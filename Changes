@@ -1,3 +1,10 @@
+    - Port to Moo
+
+    - Allow the client to supply a socket builder to take control of the
+      socket construction themselves.
+
+    - Change SO_LINGER option to be an integer as per the ZMQ spec.
+
     - Allow SUB sockets to subscribe to a subset of possible messages.
 
 0.005
