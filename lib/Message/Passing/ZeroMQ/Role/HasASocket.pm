@@ -70,9 +70,23 @@ has socket_hwm => (
     lazy => 1,
 );
 
+has socket_swap => (
+    is => 'ro',
+    isa => Int,
+    builder => '_build_socket_swap',
+    lazy => 1,
+);
+
 sub setsockopt {
     my ($self, $socket) = @_;
     $socket->setsockopt(ZMQ_HWM, $self->socket_hwm);
+
+    # work around ZeroMQ issue 140: ZMQ_SWAP expects to
+    # be able to write to the current directory and
+    # crashes if it can't
+    chdir("/tmp");
+
+    $socket->setsockopt(ZMQ_SWAP, $self->socket_swap);
 }
 
 has socket_bind => (
