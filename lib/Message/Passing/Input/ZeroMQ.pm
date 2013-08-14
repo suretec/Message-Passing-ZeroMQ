@@ -20,6 +20,7 @@ has '+_socket' => (
 sub _socket_type { 'SUB' }
 
 sub _build_socket_hwm { 100000 }
+sub _build_socket_swap { 0 }
 
 has subscribe => (
     isa => sub { ref($_[0]) eq 'ARRAY' },
