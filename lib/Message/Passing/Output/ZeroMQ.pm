@@ -17,7 +17,7 @@ has '+_socket' => (
 sub _socket_type { 'PUB' }
 
 sub _build_socket_hwm { 10000 }
-sub _build_socket_swap { 1024*1024*100 }
+sub _build_socket_swap { 1024*1024*1024 }
 
 sub consume {
     my $self = shift;
