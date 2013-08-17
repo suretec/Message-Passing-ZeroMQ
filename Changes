@@ -1,3 +1,5 @@
+    - Support (and default for writeres) to swapping content out onto disk
+
 0.006
     - Port to Moo
 
