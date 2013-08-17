@@ -81,12 +81,14 @@ sub setsockopt {
     my ($self, $socket) = @_;
     $socket->setsockopt(ZMQ_HWM, $self->socket_hwm);
 
-    # work around ZeroMQ issue 140: ZMQ_SWAP expects to
-    # be able to write to the current directory and
-    # crashes if it can't
-    chdir("/tmp");
+    if ($self->socket_swap > 0) {
+        # work around ZeroMQ issue 140: ZMQ_SWAP expects to
+        # be able to write to the current directory and
+        # crashes if it can't
+        chdir("/tmp");
 
-    $socket->setsockopt(ZMQ_SWAP, $self->socket_swap);
+        $socket->setsockopt(ZMQ_SWAP, $self->socket_swap);
+   }
 }
 
 has socket_bind => (
