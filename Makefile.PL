@@ -16,7 +16,7 @@ resources(
 requires 'Moo' => '0.091011';
 requires 'namespace::clean';
 requires 'AnyEvent';
-requires 'ZeroMQ' => '0.21';
+requires 'ZMQ::FFI';
 requires 'Try::Tiny';
 requires 'Task::Weaken';
 requires 'Message::Passing' => '0.011';
