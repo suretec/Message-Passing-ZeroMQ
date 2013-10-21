@@ -1,6 +1,6 @@
 package Message::Passing::ZeroMQ::Role::HasASocket;
 use Moo::Role;
-use ZeroMQ ':all';
+use ZMQ::FFI::Constants qw/ :all /;
 use MooX::Types::MooseLike::Base qw/ :all /;
 use namespace::clean -except => 'meta';
 
@@ -23,8 +23,8 @@ has socket_builder => (
 
 before _clear_ctx => sub {
     my $self = shift;
-    if (!$self->linger) {
-        $self->_socket->setsockopt(ZMQ_LINGER, 0);
+    if ($self->linger) {
+        $self->_socket->set_linger($self->linger);
     }
     $self->_socket->close;
     $self->_clear_socket;
@@ -44,12 +44,12 @@ sub _build_socket {
     return $self->socket_builder->($self, $self->_ctx)
         if $self->_has_socket_builder;
 
-    my $type_name = "ZeroMQ::Constants::ZMQ_" . $self->socket_type;
+    my $type_name = "ZMQ::FFI::Constants::ZMQ_" . $self->socket_type;
     my $socket = $self->_ctx->socket(do { no strict 'refs'; &$type_name() });
-    if (!$self->linger) {
-        $socket->setsockopt(ZMQ_LINGER, 0);
+    if ($self->linger) {
+        $socket->set_linger($self->linger);
     }
-    $self->setsockopt($socket);
+    $self->setsockopt($socket); 
     if ($self->_should_connect) {
         $socket->connect($self->connect);
     }
@@ -60,7 +60,7 @@ sub _build_socket {
         use Data::Dumper;
         die "Neither asked to connect or bind, invalid" . Dumper($self);
     }
-    $socket;
+    return $socket;
 }
 
 has socket_hwm => (
@@ -79,7 +79,7 @@ has socket_swap => (
 
 sub setsockopt {
     my ($self, $socket) = @_;
-    $socket->setsockopt(ZMQ_HWM, $self->socket_hwm);
+    $socket->set(ZMQ_HWM, 'uint64_t', $self->socket_hwm);
 
     if ($self->socket_swap > 0) {
         # work around ZeroMQ issue 140: ZMQ_SWAP expects to
@@ -87,7 +87,7 @@ sub setsockopt {
         # crashes if it can't
         chdir("/tmp");
 
-        $socket->setsockopt(ZMQ_SWAP, $self->socket_swap);
+        $socket->set(ZMQ_SWAP, 'uint64_t', $self->socket_swap);
    }
 }
 
@@ -161,7 +161,7 @@ The pair of PUSH, receives a proportion of messages distributed.
 
 =head2 linger
 
-Bool indicating the value of the ZMQ_LINGER options.
+Integer indicating the value of the ZMQ_LINGER options.
 
 Defaults to 0 meaning sockets will not block on shutdown if a server
 is unavailable (i.e. queued messages will be discarded).
