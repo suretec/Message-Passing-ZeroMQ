@@ -3,6 +3,7 @@ use Moo::Role;
 use ZMQ::FFI::Constants qw/ :all /;
 use MooX::Types::MooseLike::Base qw/ :all /;
 use namespace::clean -except => 'meta';
+use File::pushd qw/tempd/;
 
 with 'Message::Passing::ZeroMQ::Role::HasAContext';
 
@@ -85,7 +86,9 @@ sub setsockopt {
         # work around ZeroMQ issue 140: ZMQ_SWAP expects to
         # be able to write to the current directory and
         # crashes if it can't
-        chdir("/tmp");
+
+        # Locally scoped var so that temp dir gets removed at end of scope
+        my $dir = tempd;
 
         $socket->set(ZMQ_SWAP, 'uint64_t', $self->socket_swap);
    }
