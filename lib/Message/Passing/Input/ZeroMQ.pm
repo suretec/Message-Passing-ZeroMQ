@@ -41,8 +41,13 @@ after setsockopt => sub {
 sub _try_rx {
     my $self = shift();
     my $msg;
+
+    my ($major) = $self->_ctx->version();
+
+    my $flag = $major >= 3 ? ZMQ_DONTWAIT : ZMQ_NOBLOCK;
+
     try {
-        $msg = $self->_zmq_recv(ZMQ_NOBLOCK);
+        $msg = $self->_zmq_recv($flag);
     };
     if ($msg) {
         $self->output_to->consume($msg);

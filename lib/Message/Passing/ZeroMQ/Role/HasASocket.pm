@@ -79,7 +79,16 @@ has socket_swap => (
 
 sub setsockopt {
     my ($self, $socket) = @_;
-    $socket->set(ZMQ_HWM, 'uint64_t', $self->socket_hwm);
+
+    my ($major) = $self->_ctx->version();
+
+    if ($major >= 3) {
+        $socket->set(ZMQ_RCVHWM, 'int', $self->socket_hwm);
+        $socket->set(ZMQ_SNDHWM, 'int', $self->socket_hwm);
+    }
+    else {
+        $socket->set(ZMQ_HWM, 'uint64_t', $self->socket_hwm);
+    }
 
     if ($self->socket_swap > 0) {
         # work around ZeroMQ issue 140: ZMQ_SWAP expects to
