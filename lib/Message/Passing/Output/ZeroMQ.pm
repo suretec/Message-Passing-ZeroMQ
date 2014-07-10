@@ -1,5 +1,6 @@
 package Message::Passing::Output::ZeroMQ;
 use Moo;
+use ZeroMQ ':all';
 use namespace::clean -except => 'meta';
 
 with qw/
