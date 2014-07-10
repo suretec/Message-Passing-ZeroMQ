@@ -1,6 +1,6 @@
 package Message::Passing::Input::ZeroMQ;
 use Moo;
-use ZMQ::FFI::Constants qw/ :all /;
+use ZeroMQ qw/:all/;
 use AnyEvent;
 use Scalar::Util qw/ weaken /;
 use Try::Tiny qw/ try catch /;
@@ -33,19 +33,16 @@ after setsockopt => sub {
     my ($self, $socket) = @_;
     if ($self->socket_type eq 'SUB') {
         foreach my $sub (@{ $self->subscribe }) {
-            $socket->set(ZMQ_SUBSCRIBE, "binary", $sub);
+            $socket->setsockopt(ZMQ_SUBSCRIBE, $sub);
         }
     }
 };
 
 sub _try_rx {
     my $self = shift();
-    my $msg;
-    try {
-        $msg = $self->_zmq_recv(ZMQ_NOBLOCK);
-    };
+    my $msg = $self->_zmq_recv(ZMQ_NOBLOCK);
     if ($msg) {
-        $self->output_to->consume($msg);
+        $self->output_to->consume($msg->data);
     }
     return $msg;
 }
@@ -56,7 +53,7 @@ has _io_reader => (
     default => sub {
         my $weak_self = shift;
         weaken($weak_self);
-        AE::io $weak_self->_socket->get_fd, 0,
+        AE::io $weak_self->_socket->getsockopt( ZMQ_FD ), 0,
             sub { my $more; do { $more = $weak_self->_try_rx } while ($more) };
     },
 );

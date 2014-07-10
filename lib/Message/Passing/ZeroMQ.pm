@@ -1,6 +1,7 @@
 package Message::Passing::ZeroMQ;
 use strict;
 use warnings;
+use ZeroMQ qw/ :all /;
 use POSIX::AtFork ();
 use Sub::Name;
 use namespace::clean -except => 'meta';
@@ -177,7 +178,7 @@ For more detailed information about ZeroMQ and how it works, please consult the 
 
 =item L<Message::Passing>
 
-=item L<ZMQ::FFI>
+=item L<ZeroMQ>
 
 =item L<http://www.zeromq.org/>
 

@@ -1,7 +1,7 @@
 package Message::Passing::ZeroMQ::Role::HasAContext;
 use Moo::Role;
 use Message::Passing::ZeroMQ ();
-use ZMQ::FFI;
+use ZeroMQ ':all';
 use Scalar::Util qw/ weaken /;
 use namespace::clean -except => 'meta';
 
@@ -13,7 +13,7 @@ has _ctx => (
     lazy => 1,
     default => sub {
         my $self = shift;
-        my $ctx = ZMQ::FFI->new();
+        my $ctx = ZeroMQ::Context->new();
         push(@Message::Passing::ZeroMQ::_WITH_CONTEXTS, $self);
         weaken($Message::Passing::ZeroMQ::_WITH_CONTEXTS[-1]);
         $ctx;
