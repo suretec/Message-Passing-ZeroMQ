@@ -19,8 +19,11 @@ has '+_socket' => (
 
 sub _socket_type { 'SUB' }
 
-sub _build_socket_hwm { 100000 }
-sub _build_socket_swap { 0 }
+has socket_hwm => (
+    is      => 'rw',
+    default => 10000,
+);
+
 
 has subscribe => (
     isa => sub { ref($_[0]) eq 'ARRAY' },
@@ -29,14 +32,17 @@ has subscribe => (
     default => sub { [ '' ] }, # Subscribe to everything!
 );
 
-after setsockopt => sub {
+sub setsockopt {
     my ($self, $socket) = @_;
+
+    $socket->set(ZMQ_RCVHWM, 'int', $self->socket_hwm);
+
     if ($self->socket_type eq 'SUB') {
         foreach my $sub (@{ $self->subscribe }) {
             $socket->set(ZMQ_SUBSCRIBE, "binary", $sub);
         }
     }
-};
+}
 
 sub _try_rx {
     my $self = shift();

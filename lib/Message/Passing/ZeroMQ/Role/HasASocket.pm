@@ -64,36 +64,6 @@ sub _build_socket {
     return $socket;
 }
 
-has socket_hwm => (
-    is => 'ro',
-    isa => Int,
-    builder => '_build_socket_hwm',
-    lazy => 1,
-);
-
-has socket_swap => (
-    is => 'ro',
-    isa => Int,
-    builder => '_build_socket_swap',
-    lazy => 1,
-);
-
-sub setsockopt {
-    my ($self, $socket) = @_;
-    $socket->set(ZMQ_HWM, 'uint64_t', $self->socket_hwm);
-
-    if ($self->socket_swap > 0) {
-        # work around ZeroMQ issue 140: ZMQ_SWAP expects to
-        # be able to write to the current directory and
-        # crashes if it can't
-
-        # Locally scoped var so that temp dir gets removed at end of scope
-        my $dir = tempd;
-
-        $socket->set(ZMQ_SWAP, 'uint64_t', $self->socket_swap);
-   }
-}
-
 has socket_bind => (
     is => 'ro',
     isa => Str,
