@@ -2,6 +2,8 @@ package Message::Passing::Output::ZeroMQ;
 use Moo;
 use namespace::clean -except => 'meta';
 
+use ZMQ::FFI::Constants qw/ :all /;
+
 with qw/
     Message::Passing::ZeroMQ::Role::HasASocket
     Message::Passing::Role::Output
@@ -15,13 +17,20 @@ has '+_socket' => (
 
 sub _socket_type { 'PUB' }
 
-sub _build_socket_hwm { 10000 }
-sub _build_socket_swap { 1024*1024*1024 }
+has socket_hwm => (
+    is      => 'rw',
+    default => 10000,
+);
 
 sub consume {
     my $self = shift;
     my $data = shift;
     $self->_zmq_send($data);
+}
+
+sub setsockopt {
+    my ($self, $socket) = @_;
+    $socket->set(ZMQ_SNDHWM, 'int', $self->socket_hwm);
 }
 
 1;

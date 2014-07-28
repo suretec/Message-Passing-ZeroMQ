@@ -1,3 +1,9 @@
+0.0072
+    - Remove SWAP, since libzmq3 removes it.
+
+0.0071
+    - Fix chdir to hardcoded /tmp/ directory
+
 0.007
     - Support (and default for writeres) to swapping content out onto disk
 
