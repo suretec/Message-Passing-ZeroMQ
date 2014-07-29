@@ -9,21 +9,21 @@ use Message::Passing::Output::Test;
 use ZMQ::FFI::Constants qw/ :all /;
 use ZMQ::FFI;
 
-my $cv = AnyEvent->condvar;
-my $output = Message::Passing::Output::Test->new(
-    cb => sub { $cv->send;},
-);
-my $dec = Message::Passing::Filter::Decoder::JSON->new(output_to => $output);
-my $input = Message::Passing::Input::ZeroMQ->new(
-    socket_bind => 'tcp://*:5558',
-    output_to => $dec,
-);
-ok $input;
-
 # Test must fork, because it must sleep, and sleeping would put everything to sleep
 my $pid = fork();
 if ($pid){
     # Parent
+
+    my $cv = AnyEvent->condvar;
+    my $output = Message::Passing::Output::Test->new(
+        cb => sub { $cv->send;},
+    );
+    my $dec = Message::Passing::Filter::Decoder::JSON->new(output_to => $output);
+    my $input = Message::Passing::Input::ZeroMQ->new(
+        socket_bind => 'tcp://*:5558',
+        output_to   => $dec,
+    );
+    ok $input;
 
     $cv->recv;
 
@@ -49,7 +49,6 @@ elsif (defined $pid){
     exit;
     }
 else {
-    # Failed to fork
     die "Failed to fork";
     }
 
