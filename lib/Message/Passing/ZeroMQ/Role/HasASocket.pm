@@ -50,7 +50,7 @@ sub _build_socket {
     if ($self->linger) {
         $socket->set_linger($self->linger);
     }
-    $self->setsockopt($socket); 
+    $self->setsockopt($socket);
     if ($self->_should_connect) {
         $socket->connect($self->connect);
     }
