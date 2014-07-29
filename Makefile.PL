@@ -31,7 +31,7 @@ author_requires(
     'Test::NoTabs' => '0',
     'Test::Pod::Coverage' => '1.04',
     'Pod::Coverage' => '0.19',
-    'Pod::Coverage::TrustPod' => '0',
+    'Pod::Coverage::Moose' => '0',
     'Test::Spelling' => '0',
 );
 
