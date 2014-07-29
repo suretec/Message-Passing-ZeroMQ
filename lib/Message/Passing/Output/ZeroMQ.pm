@@ -1,8 +1,10 @@
 package Message::Passing::Output::ZeroMQ;
 use Moo;
+use MooX::Types::MooseLike::Base qw/ :all /;
 use namespace::clean -except => 'meta';
 
 use ZMQ::FFI::Constants qw/ :all /;
+use Time::HiRes;
 
 with qw/
     Message::Passing::ZeroMQ::Role::HasASocket
@@ -22,16 +24,60 @@ has socket_hwm => (
     default => 10000,
 );
 
-sub consume {
+has subscribe_delay => (
+    is      => 'ro',
+    isa     => Num,
+    default => 0.2,
+    );
+
+# socket_(probably)_subscribed, but who has the bytes for that
+has socket_subscribed => (
+    is  => 'rw',
+    isa => Bool,
+    );
+has socket_connect_time => (
+    is  => 'rw',
+    isa => Num,
+    );
+
+sub BUILD {
     my $self = shift;
-    my $data = shift;
-    $self->_zmq_send($data);
+    # Force a socket to be built, so that there's more chance the first message will be sent
+    if ($self->_should_connect){
+        my $socket = $self->_socket;
+        return;
+        }
+    return;
+    }
+
+sub consume {
+    my ($self, $data) = @_;
+
+    # See the slow joiner problem for PUB/SUB, outlined in
+    # http://zguide.zeromq.org/page:all#Getting-the-Message-Out
+    if (!$self->socket_subscribed && $self->socket_connect_time){
+        my $time = Time::HiRes::time;
+        my $alive_time = $time - $self->socket_connect_time;
+        my $sleep_time = sprintf "%.4f", ($self->subscribe_delay - $alive_time);
+        # warn "Alive $alive_time, so sleep time $sleep_time";
+        if ($sleep_time > 0){
+            Time::HiRes::sleep $sleep_time;
+            }
+        $self->socket_subscribed(1);
+        }
+
+    return $self->_zmq_send($data);
 }
 
 sub setsockopt {
     my ($self, $socket) = @_;
     $socket->set(ZMQ_SNDHWM, 'int', $self->socket_hwm);
 }
+
+after _build_socket => sub {
+    my $self = shift;
+    $self->socket_connect_time( Time::HiRes::time );
+    };
 
 1;
 
@@ -63,7 +109,17 @@ a logger in normal perl applications.
 
 =head1 ATTRIBUTES
 
+
 See L<Message::Passing::ZeroMQ/CONNECTION ATTRIBUTES>.
+
+=head2 subscribe_delay
+
+Time in floating seconds to sleep to ensure the receiving socket has subscribed.
+This is the longest the sleep might take.
+
+See the slow-joiner problem: L<http://zguide.zeromq.org/page:all#Getting-the-Message-Out>.
+
+DEFAULT: 0.2 seconds
 
 =head1 METHODS
 

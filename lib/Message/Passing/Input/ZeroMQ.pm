@@ -24,7 +24,6 @@ has socket_hwm => (
     default => 10000,
 );
 
-
 has subscribe => (
     isa => sub { ref($_[0]) eq 'ARRAY' },
     is => 'ro',
