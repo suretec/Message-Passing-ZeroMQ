@@ -5,7 +5,8 @@ use Message::Passing::Output::ZeroMQ;
 
 my $output = Message::Passing::Output::ZeroMQ->new();
 
-like $output->zmq_major_version, qr/^[234]$/, "ZMQ is a sane major version";
+my $version = $output->zmq_major_version;
+like $version, qr/^[234]$/, "ZMQ is a sane major version: $version";
 
 done_testing;
 

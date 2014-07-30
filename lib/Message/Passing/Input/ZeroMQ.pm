@@ -34,13 +34,20 @@ has subscribe => (
 sub setsockopt {
     my ($self, $socket) = @_;
 
-    $socket->set(ZMQ_RCVHWM, 'int', $self->socket_hwm);
+    if ($self->zmq_major_version >= 3){
+        $socket->set(ZMQ_RCVHWM, 'int', $self->socket_hwm);
+    }
+    else {
+        $socket->set(ZMQ_HWM, 'uint64_t', $self->socket_hwm);
+    }
 
     if ($self->socket_type eq 'SUB') {
         foreach my $sub (@{ $self->subscribe }) {
             $socket->set(ZMQ_SUBSCRIBE, "binary", $sub);
         }
     }
+
+    return;
 }
 
 sub _try_rx {

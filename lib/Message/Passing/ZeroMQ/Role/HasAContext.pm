@@ -11,7 +11,7 @@ use namespace::clean -except => 'meta';
 has zmq_major_version => (
     is          => 'lazy',
     isa         => Num,
-    );
+);
 
 has _ctx => (
     is => 'ro',
@@ -31,7 +31,7 @@ sub _build_zmq_major_version {
     my ($self) = @_;
     my ($major, $minor, $patch) = $self->_ctx->version;
     return $major;
-    }
+}
 
 1;
 
