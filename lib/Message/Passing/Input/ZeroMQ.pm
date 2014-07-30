@@ -1,6 +1,6 @@
 package Message::Passing::Input::ZeroMQ;
 use Moo;
-use ZeroMQ qw/:all/;
+use ZMQ::FFI::Constants qw/ :all /;
 use AnyEvent;
 use Scalar::Util qw/ weaken /;
 use Try::Tiny qw/ try catch /;
@@ -19,8 +19,10 @@ has '+_socket' => (
 
 sub _socket_type { 'SUB' }
 
-sub _build_socket_hwm { 100000 }
-sub _build_socket_swap { 0 }
+has socket_hwm => (
+    is      => 'rw',
+    default => 10000,
+);
 
 has subscribe => (
     isa => sub { ref($_[0]) eq 'ARRAY' },
@@ -29,20 +31,33 @@ has subscribe => (
     default => sub { [ '' ] }, # Subscribe to everything!
 );
 
-after setsockopt => sub {
+sub setsockopt {
     my ($self, $socket) = @_;
+
+    if ($self->zmq_major_version >= 3){
+        $socket->set(ZMQ_RCVHWM, 'int', $self->socket_hwm);
+    }
+    else {
+        $socket->set(ZMQ_HWM, 'uint64_t', $self->socket_hwm);
+    }
+
     if ($self->socket_type eq 'SUB') {
         foreach my $sub (@{ $self->subscribe }) {
-            $socket->setsockopt(ZMQ_SUBSCRIBE, $sub);
+            $socket->set(ZMQ_SUBSCRIBE, "binary", $sub);
         }
     }
-};
+
+    return;
+}
 
 sub _try_rx {
     my $self = shift();
-    my $msg = $self->_zmq_recv(ZMQ_NOBLOCK);
+    my $msg;
+    try {
+        $msg = $self->_zmq_recv(ZMQ_NOBLOCK);
+    };
     if ($msg) {
-        $self->output_to->consume($msg->data);
+        $self->output_to->consume($msg);
     }
     return $msg;
 }
@@ -53,7 +68,7 @@ has _io_reader => (
     default => sub {
         my $weak_self = shift;
         weaken($weak_self);
-        AE::io $weak_self->_socket->getsockopt( ZMQ_FD ), 0,
+        AE::io $weak_self->_socket->get_fd, 0,
             sub { my $more; do { $more = $weak_self->_try_rx } while ($more) };
     },
 );

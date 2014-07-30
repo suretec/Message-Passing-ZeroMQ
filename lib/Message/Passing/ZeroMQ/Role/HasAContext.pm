@@ -1,25 +1,37 @@
 package Message::Passing::ZeroMQ::Role::HasAContext;
 use Moo::Role;
 use Message::Passing::ZeroMQ ();
-use ZeroMQ ':all';
+use MooX::Types::MooseLike::Base qw/ :all /;
+use ZMQ::FFI;
 use Scalar::Util qw/ weaken /;
 use namespace::clean -except => 'meta';
 
 ## TODO - Support (default to?) shared contexts
 
+has zmq_major_version => (
+    is          => 'lazy',
+    isa         => Num,
+);
+
 has _ctx => (
     is => 'ro',
-#    isa => 'ZeroMQ::Context',
+#    isa => 'ZMQ::FFI',
     lazy => 1,
     default => sub {
         my $self = shift;
-        my $ctx = ZeroMQ::Context->new();
+        my $ctx = ZMQ::FFI->new();
         push(@Message::Passing::ZeroMQ::_WITH_CONTEXTS, $self);
         weaken($Message::Passing::ZeroMQ::_WITH_CONTEXTS[-1]);
         $ctx;
     },
     clearer => '_clear_ctx',
 );
+
+sub _build_zmq_major_version {
+    my ($self) = @_;
+    my ($major, $minor, $patch) = $self->_ctx->version;
+    return $major;
+}
 
 1;
 

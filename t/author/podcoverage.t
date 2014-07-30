@@ -2,17 +2,15 @@ use strict;
 use warnings;
 use Test::More;
 
-use Pod::Coverage 0.19;
+use Pod::Coverage::Moose;
 use Test::Pod::Coverage 1.04;
 
 my @modules = all_modules;
 our @private = ( 'BUILD' );
 foreach my $module (@modules) {
-    local @private = (@private, 'expand_class_name', 'make') if $module =~ /^Message::Passing::DSL::Factory$/;
 
     pod_coverage_ok($module, {
-        also_private   => \@private,
-        coverage_class => 'Pod::Coverage::TrustPod',
+        coverage_class => 'Pod::Coverage::Moose',
     });
 }
 

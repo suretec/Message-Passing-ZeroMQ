@@ -151,7 +151,7 @@ SEE ALSO
     Message::Passing::Output::ZeroMQ
     Message::Passing::Input::ZeroMQ
     Message::Passing
-    ZeroMQ
+    ZMQ::FFI
     <http://www.zeromq.org/>
     <http://zguide.zeromq.org/page:all>
 
