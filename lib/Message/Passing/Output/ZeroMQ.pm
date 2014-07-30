@@ -46,9 +46,10 @@ sub BUILD {
     if ($self->_should_connect){
         my $socket = $self->_socket;
         return;
-        }
-    return;
     }
+
+    return;
+}
 
 sub consume {
     my ($self, $data) = @_;
@@ -62,22 +63,30 @@ sub consume {
         # warn "Alive $alive_time, so sleep time $sleep_time";
         if ($sleep_time > 0){
             Time::HiRes::sleep $sleep_time;
-            }
-        $self->socket_subscribed(1);
         }
+        $self->socket_subscribed(1);
+    }
 
     return $self->_zmq_send($data);
 }
 
 sub setsockopt {
     my ($self, $socket) = @_;
-    $socket->set(ZMQ_SNDHWM, 'int', $self->socket_hwm);
+
+    if ($self->zmq_major_version >= 3){
+        $socket->set(ZMQ_SNDHWM, 'int', $self->socket_hwm);
+    }
+    else {
+        $socket->set(ZMQ_HWM, 'uint64_t', $self->socket_hwm);
+    }
+
+    return;
 }
 
 after _build_socket => sub {
     my $self = shift;
     $self->socket_connect_time( Time::HiRes::time );
-    };
+};
 
 1;
 
