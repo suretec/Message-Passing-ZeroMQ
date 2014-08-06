@@ -22,6 +22,7 @@ requires 'Task::Weaken';
 requires 'Message::Passing' => '0.011';
 requires 'POSIX::AtFork' => '0.02';
 requires 'Sub::Name';
+requires 'File::pushd';
 
 test_requires 'Test::More' => '0.88';
 
