@@ -1,4 +1,4 @@
-NEXT
+0.008
     - Fix first message (probably) not sent with libzmq3
     - Added zmq_major_version accessor
     - Remove SWAP, since libzmq3 removes it. Removes chdir
