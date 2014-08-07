@@ -1,6 +1,6 @@
 package Message::Passing::ZeroMQ::Role::HasASocket;
 use Moo::Role;
-use ZeroMQ ':all';
+use ZMQ::FFI::Constants qw/ :all /;
 use MooX::Types::MooseLike::Base qw/ :all /;
 use namespace::clean -except => 'meta';
 use File::pushd qw/tempd/;
@@ -24,8 +24,8 @@ has socket_builder => (
 
 before _clear_ctx => sub {
     my $self = shift;
-    if (!$self->linger) {
-        $self->_socket->setsockopt(ZMQ_LINGER, 0);
+    if ($self->linger) {
+        $self->_socket->set_linger($self->linger);
     }
     $self->_socket->close;
     $self->_clear_socket;
@@ -45,10 +45,10 @@ sub _build_socket {
     return $self->socket_builder->($self, $self->_ctx)
         if $self->_has_socket_builder;
 
-    my $type_name = "ZeroMQ::Constants::ZMQ_" . $self->socket_type;
+    my $type_name = "ZMQ::FFI::Constants::ZMQ_" . $self->socket_type;
     my $socket = $self->_ctx->socket(do { no strict 'refs'; &$type_name() });
-    if (!$self->linger) {
-        $socket->setsockopt(ZMQ_LINGER, 0);
+    if ($self->linger) {
+        $socket->set_linger($self->linger);
     }
     $self->setsockopt($socket);
     if ($self->_should_connect) {
@@ -92,6 +92,7 @@ sub setsockopt {
 
         $socket->setsockopt(ZMQ_SWAP, $self->socket_swap);
    }
+    return $socket;
 }
 
 has socket_bind => (
@@ -164,7 +165,7 @@ The pair of PUSH, receives a proportion of messages distributed.
 
 =head2 linger
 
-Bool indicating the value of the ZMQ_LINGER options.
+Integer indicating the value of the ZMQ_LINGER options.
 
 Defaults to 0 meaning sockets will not block on shutdown if a server
 is unavailable (i.e. queued messages will be discarded).

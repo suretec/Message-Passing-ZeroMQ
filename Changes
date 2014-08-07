@@ -1,3 +1,8 @@
+NEXT
+    - Fix first message (probably) not sent with libzmq3
+    - Added zmq_major_version accessor
+    - Remove SWAP, since libzmq3 removes it. Removes chdir
+
 0.007
     - Support (and default for writeres) to swapping content out onto disk
 

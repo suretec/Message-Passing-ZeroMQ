@@ -16,7 +16,7 @@ resources(
 requires 'Moo' => '0.091011';
 requires 'namespace::clean';
 requires 'AnyEvent';
-requires 'ZeroMQ' => '0.21';
+requires 'ZMQ::FFI';
 requires 'Try::Tiny';
 requires 'Task::Weaken';
 requires 'Message::Passing' => '0.011';
@@ -31,7 +31,7 @@ author_requires(
     'Test::NoTabs' => '0',
     'Test::Pod::Coverage' => '1.04',
     'Pod::Coverage' => '0.19',
-    'Pod::Coverage::TrustPod' => '0',
+    'Pod::Coverage::Moose' => '0',
     'Test::Spelling' => '0',
 );
 
