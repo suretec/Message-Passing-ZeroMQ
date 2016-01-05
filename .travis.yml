@@ -1,6 +1,5 @@
 ---
 before_install:
-  - sudo apt-get install aspell
   - cpanm Module::Install
   - cpanm Module::Install::AuthorRequires
   - cpanm Module::Install::AuthorTests
@@ -10,7 +9,6 @@ before_install:
   - cpanm Test::Pod::Coverage
   - cpanm Pod::Coverage
   - cpanm Pod::Coverage::TrustPod
-  - cpanm Test::Spelling
   - cpanm Compress::Zlib
   - cpanm Crypt::Blowfish
   - cpanm Compress::Bzip2
