@@ -32,6 +32,7 @@ author_requires(
     'Test::Pod::Coverage' => '1.04',
     'Pod::Coverage' => '0.19',
     'Pod::Coverage::Moose' => '0',
+    'Test::Spelling' => '0',
 );
 
 author_tests 't/author';

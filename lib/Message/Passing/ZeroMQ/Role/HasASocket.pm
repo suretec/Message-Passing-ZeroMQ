@@ -61,37 +61,6 @@ sub _build_socket {
         use Data::Dumper;
         die "Neither asked to connect or bind, invalid" . Dumper($self);
     }
-    $socket;
-}
-
-has socket_hwm => (
-    is => 'ro',
-    isa => Int,
-    builder => '_build_socket_hwm',
-    lazy => 1,
-);
-
-has socket_swap => (
-    is => 'ro',
-    isa => Int,
-    builder => '_build_socket_swap',
-    lazy => 1,
-);
-
-sub setsockopt {
-    my ($self, $socket) = @_;
-    $socket->setsockopt(ZMQ_HWM, $self->socket_hwm);
-
-    if ($self->socket_swap > 0) {
-        # work around ZeroMQ issue 140: ZMQ_SWAP expects to
-        # be able to write to the current directory and
-        # crashes if it can't
-
-        # Locally scoped var so that temp dir gets removed at end of scope
-        my $dir = tempd;
-
-        $socket->setsockopt(ZMQ_SWAP, $self->socket_swap);
-   }
     return $socket;
 }
 
