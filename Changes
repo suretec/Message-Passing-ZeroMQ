@@ -1,3 +1,5 @@
+0.009
+    - Fix previous release (HWM handling)
 0.008
     - Fix first message (probably) not sent with libzmq3
     - Added zmq_major_version accessor
