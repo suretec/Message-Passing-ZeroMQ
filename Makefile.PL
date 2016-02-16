@@ -23,6 +23,7 @@ requires 'Message::Passing' => '0.011';
 requires 'POSIX::AtFork' => '0.02';
 requires 'Sub::Name';
 requires 'File::pushd';
+requires 'MooX::Types::MooseLike';
 
 test_requires 'Test::More' => '0.88';
 
