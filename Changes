@@ -1,3 +1,4 @@
+    - Fix circular reference leak that caused test failures
 0.010
     - Update deps
 0.009

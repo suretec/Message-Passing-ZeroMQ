@@ -26,7 +26,7 @@ my $t; $t = AnyEvent->timer(
     after => 1,
     cb => sub {
         $output->consume({});
-        $t = AnyEvent->timer(after => 1, cb => sub { $cv->send });
+        $t = AnyEvent->timer(after => 1, cb => sub { $cv->send; undef $t; });
     },
 );
 $cv->recv;
